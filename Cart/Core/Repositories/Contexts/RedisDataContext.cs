@@ -3,7 +3,7 @@
     using Cart.Core.Repositories.Contexts.Interfaces;
     using StackExchange.Redis;
 
-    public class RedisDataContext : IConnection<IConnectionMultiplexer>
+    public class RedisDataContext : IConnection<IDatabase>
     {
 
         public ConnectionMultiplexer _connection;
@@ -13,9 +13,9 @@
             _connection = ConnectionMultiplexer.Connect(configuration.GetValue<string>("Databases:Redis:ConnectionString"));
         }
 
-        public IConnectionMultiplexer GetConnection()
+        public IDatabase GetConnection()
         {
-            return _connection;
+            return _connection.GetDatabase();
         }
     }
 }

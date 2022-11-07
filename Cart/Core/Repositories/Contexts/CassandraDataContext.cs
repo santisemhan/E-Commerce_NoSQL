@@ -1,36 +1,29 @@
 ﻿namespace Cart.Core.Repositories.Contexts
 {
     using Cassandra;
-    using Cassandra.Mapping;
     using Cart.Core.Repositories.Contexts.Interfaces;
 
-    public class CassandraDataContext : Mappings, IConnection<ISession>
+    public class CassandraDataContext : IConnection<ISession>
     {
-        // SEE: https://www.youtube.com/watch?v=GlDERX0B5HY&ab_channel=DevNinja
-
-        private ICluster _cluster;
-
-        private string KeySpaceName;
+        private ISession _session;
 
         public CassandraDataContext(IConfiguration configuration)
         {
-            _cluster = Cluster.Builder()
+            var keyspace = configuration.GetValue<string>("Databases:Cassandra:KeySpace");
+
+            _session = Cluster.Builder()
                 .AddContactPoint(configuration.GetValue<string>("Databases:Cassandra:ConnectionString"))
                 .WithPort(configuration.GetValue<int>("Databases:Cassandra:Port"))
-                .Build();
+                .Build()
+                .Connect();
 
-            KeySpaceName = configuration.GetValue<string>("Databases:Cassandra:KeySpace");
-
-            // Example for entities
-            // For<Post>().TableName("posts").PartitionKey(u => u.Id)
-            //  .Column(x => x.Id)
-            //  .Column(x => x.Title)
-            //  .Column(x => x.Body)
+            _session.CreateKeyspaceIfNotExists(keyspace);
+            _session.ChangeKeyspace(keyspace);
         }
 
         public ISession GetConnection()
         {
-            return _cluster.Connect(KeySpaceName);
+            return _session;
         }
     }
 }

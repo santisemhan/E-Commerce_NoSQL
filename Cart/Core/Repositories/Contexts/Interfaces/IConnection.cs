@@ -2,6 +2,6 @@
 {
     public interface IConnection<T> where T : class
     {
-        public T GetConnection();
+        T GetConnection();
     }
 }
