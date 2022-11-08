@@ -21,7 +21,7 @@
 
         public async Task ChangeUserCartAsync(UserCartDTO info)
         {
-            var key = new RedisKey(info.UserId);
+            var key = new RedisKey(info.User.UserId);
 
             await _redisConnection.GetConnection()
                 .GetDatabase()
@@ -31,7 +31,7 @@
                 .PrepareAsync("INSERT INTO UserCart (userId) VALUES (?)");
 
             _cassandraConnection.GetConnection()
-                .Execute(query.Bind(info.UserId));
+                .Execute(query.Bind(info.User.UserId));
         }
 
         public async Task<UserCartDTO> GetUserCartAsync(Guid userId)

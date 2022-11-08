@@ -4,9 +4,9 @@
 
     public class UserCartDTO
     {
-        public string UserId { get; set; }
+        public UserDTO User { get; set; }
 
-        // Agregar mas campos del carrito
+        public List<ProductCartDTO> Products { get; set; }
 
         public UserCartDTO() { }
 
@@ -18,7 +18,7 @@
         public HashEntry[] ToHashEntries()
         {
             var entries = new HashEntry[50];
-            entries.Append(new HashEntry(nameof(UserId), UserId));
+            entries.Append(new HashEntry(nameof(User.UserId), User.UserId));
 
             return entries;
         }
