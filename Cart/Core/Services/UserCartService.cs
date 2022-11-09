@@ -1,10 +1,8 @@
 ﻿namespace Cart.Core.Services
 {
     using Cart.Core.DataTransferObjects;
-    using Cart.Core.Repositories.Contexts.Interfaces;
     using Cart.Core.Repositories.Interfaces;
     using Cart.Core.Services.Interfaces;
-    using StackExchange.Redis;
     using System;
     using System.Threading.Tasks;
 
@@ -22,7 +20,7 @@
             await _userCartRepository.ChangeUserCartAsync(userCartInfo);
         }
 
-        public async Task<UserCartDTO> GetUserCartAsync(Guid userId)
+        public async Task<UserCartDTO?> GetUserCartAsync(Guid userId)
         {
             return await _userCartRepository.GetUserCartAsync(userId);
         }

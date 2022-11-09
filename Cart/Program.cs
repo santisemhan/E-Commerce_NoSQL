@@ -34,7 +34,7 @@ services.Configure<RequestLocalizationOptions>(opts => {
 });
 
 // Databases Connections
-services.AddTransient<IConnection<IConnectionMultiplexer>, RedisDataContext>();
+services.AddTransient<IConnection<IDatabase>, RedisDataContext>();
 services.AddTransient<IConnection<Cassandra.ISession>, CassandraDataContext>();
 
 // Services

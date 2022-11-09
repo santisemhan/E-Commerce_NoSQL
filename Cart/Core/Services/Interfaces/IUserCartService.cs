@@ -4,7 +4,7 @@
 
     public interface IUserCartService
     {
-        Task<UserCartDTO> GetUserCartAsync(Guid userId);
+        Task<UserCartDTO?> GetUserCartAsync(Guid userId);
 
         Task ChangeUserCart(UserCartDTO userCartInfo);
     }

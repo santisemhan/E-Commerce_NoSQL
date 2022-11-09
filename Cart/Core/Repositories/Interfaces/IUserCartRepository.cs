@@ -6,6 +6,6 @@
     {
         Task ChangeUserCartAsync(UserCartDTO userCartInfo);
 
-        Task<UserCartDTO> GetUserCartAsync(Guid userId);
+        Task<UserCartDTO?> GetUserCartAsync(Guid userId);
     }
 }

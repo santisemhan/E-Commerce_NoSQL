@@ -25,6 +25,7 @@
         [HttpPost]
         public async Task<IActionResult> ChangeUserCart([FromBody] UserCartDTO userCartInfo)
         {
+            await _userCartService.ChangeUserCart(userCartInfo);
             return NoContent();
         }
 

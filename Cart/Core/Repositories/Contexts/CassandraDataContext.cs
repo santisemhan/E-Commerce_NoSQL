@@ -9,16 +9,11 @@
 
         public CassandraDataContext(IConfiguration configuration)
         {
-            var keyspace = configuration.GetValue<string>("Databases:Cassandra:KeySpace");
-
             _session = Cluster.Builder()
-                .AddContactPoint(configuration.GetValue<string>("Databases:Cassandra:ConnectionString"))
-                .WithPort(configuration.GetValue<int>("Databases:Cassandra:Port"))
-                .Build()
-                .Connect();
-
-            _session.CreateKeyspaceIfNotExists(keyspace);
-            _session.ChangeKeyspace(keyspace);
+                        .WithCloudSecureConnectionBundle(@"C:\.Proyectos\secure-connect-e-commerce-bd2.zip")
+                        .WithCredentials(configuration.GetValue<string>("Databases:Cassandra:ClientID"), configuration.GetValue<string>("Databases:Cassandra:ClientSecret"))
+                        .Build()
+                        .Connect();
         }
 
         public ISession GetConnection()

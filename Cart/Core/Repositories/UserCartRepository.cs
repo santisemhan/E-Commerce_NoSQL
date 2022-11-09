@@ -6,43 +6,71 @@
     using Cassandra;
     using StackExchange.Redis;
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     public class UserCartRepository : IUserCartRepository
     {
-        private readonly IConnection<IConnectionMultiplexer> _redisConnection;
+        private readonly IConnection<IDatabase> _redisConnection;
         private readonly IConnection<ISession> _cassandraConnection;
 
-        public UserCartRepository(IConnection<IConnectionMultiplexer> redisConnection, IConnection<ISession> cassandraConnection)
+        public UserCartRepository(IConnection<IDatabase> redisConnection, IConnection<ISession> cassandraConnection)
         {
             _redisConnection = redisConnection;
             _cassandraConnection = cassandraConnection;
+            _cassandraConnection.GetConnection().ChangeKeyspace("usercart");
         }
 
         public async Task ChangeUserCartAsync(UserCartDTO info)
         {
-            var key = new RedisKey(info.User.UserId);
+            var userId = info.User.UserId;
 
             await _redisConnection.GetConnection()
-                .GetDatabase()
-                .HashSetAsync(key, info.ToHashEntries());
+                .HashSetAsync($"user:{userId}", info.User.ToHashEntries());
 
-            var query = await _cassandraConnection.GetConnection()
-                .PrepareAsync("INSERT INTO UserCart (userId) VALUES (?)");
+            foreach (var product in info.Products)
+            {
+                var productKey = $"userCart:{userId}:{product.ProductCatalogId}";
+                await _redisConnection.GetConnection()
+                    .HashSetAsync(productKey, product.ToHashEntries());
+            }
 
-            _cassandraConnection.GetConnection()
-                .Execute(query.Bind(info.User.UserId));
+            await _redisConnection.GetConnection()
+                .StringSetAsync($"userCart:{userId}", string.Join(",", info.Products.Select(p => p.ProductCatalogId.ToString())));
+
+            //var query = await _cassandraConnection.GetConnection()
+            //    .PrepareAsync("INSERT INTO UserCart (userId) VALUES (?)");
+
+            //_cassandraConnection.GetConnection()
+            //    .Execute(query.Bind(info.User.UserId));
         }
 
-        public async Task<UserCartDTO> GetUserCartAsync(Guid userId)
+        public async Task<UserCartDTO?> GetUserCartAsync(Guid userId)
         {
-            var key = new RedisKey(userId.ToString());
+            var result = new UserCartDTO();
 
-            var userCart = await _redisConnection.GetConnection()
-                .GetDatabase()
-                .HashGetAllAsync(key);
+            var userInfo = await _redisConnection.GetConnection()
+                .HashGetAllAsync($"user:{userId}");
 
-            return new UserCartDTO(userCart);
+            if (userInfo.Length == 0)
+               return null;
+
+            result.AddUserData(userId, userInfo);
+
+            var userProductsId = (await _redisConnection.GetConnection()
+                .StringGetAsync($"userCart:{userId}")).ToString()
+                .Split(",")
+                .ToList();
+
+            foreach (var productCartId in userProductsId)
+            {
+                var productInfo = await _redisConnection.GetConnection()
+                    .HashGetAllAsync($"userCart:{userId}:{productCartId}");
+
+                result.AddProductData(Guid.Parse(productCartId), productInfo);
+            }
+          
+            return result;
         }
     }
 }

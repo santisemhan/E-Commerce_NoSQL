@@ -6,21 +6,21 @@
     {
         public UserDTO User { get; set; }
 
-        public List<ProductCartDTO> Products { get; set; }
+        public List<ProductCartDTO> Products { get; set; } = new List<ProductCartDTO>();
 
         public UserCartDTO() { }
 
-        public UserCartDTO(HashEntry[] entries) 
-        { 
-
-        }
-
-        public HashEntry[] ToHashEntries()
+        public void AddUserData(Guid id, HashEntry[] entries)
         {
-            var entries = new HashEntry[50];
-            entries.Append(new HashEntry(nameof(User.UserId), User.UserId));
+            User = new UserDTO();
+            User.AddHashEntryData(id, entries);
+        }   
 
-            return entries;
+        public void AddProductData(Guid id, HashEntry[] entries)
+        {
+            var product = new ProductCartDTO();
+            product.AddHashEntryData(id, entries);
+            Products.Add(product);
         }
     }
 }
