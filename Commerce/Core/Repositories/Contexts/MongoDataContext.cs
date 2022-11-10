@@ -5,24 +5,9 @@
 
     public class MongoDataContext : IConnection<IMongoDatabase>
     {
-        // SEE: https://www.youtube.com/watch?v=exXavNOqaVo&ab_channel=IAmTimCorey
-
         private MongoClient _client;
 
         private string DataBaseName;
-
-        public IMongoDatabase Database;
-
-        public MongoDataContext()
-        {
-            _client = new MongoClient("mongodb://127.0.0.1:8959");
-            Database = _client.GetDatabase("CommerceDB");
-        }
-
-        /*
-         * OBS: no se como usar el constructor de abajo
-         * ¿Cuando instancio una clase con IConfiguration como paso el parametro?
-         */
 
         public MongoDataContext(IConfiguration configuration)
         {

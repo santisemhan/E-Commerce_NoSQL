@@ -1,5 +1,5 @@
 ﻿using Cart.Core.DataTransferObjects;
-using Commerce.Core.Repositories.Contexts;
+using Commerce.Core.Repositories.Contexts.Interfaces;
 using Commerce.Core.Repositories.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -8,39 +8,44 @@ namespace Commerce.Core.Repositories;
 
 public class UserRepository : IUserRepository
 {
-    internal MongoDataContext repository = new MongoDataContext();
-    private IMongoCollection<UserDTO> Collection;
+    private readonly IConnection<IMongoDatabase> _mongoConnection;
 
-    public UserRepository()
+    public UserRepository(IConnection<IMongoDatabase> mongoConnection)
     {
-        Collection = repository.Database.GetCollection<UserDTO>("Users");
+        _mongoConnection = mongoConnection;
     }
+
     public async Task Delete(string id)
     {
         var filter = Builders<UserDTO>
             .Filter
             .Eq(x => x.UserId, new ObjectId(id));
 
-        await Collection.DeleteOneAsync(filter);
+        await _mongoConnection.GetConnection()
+            .GetCollection<UserDTO>("Users")
+            .DeleteOneAsync(filter);
     }
 
     public async Task<List<UserDTO>> GetAll()
     {
-        return await Collection
-            .FindAsync(new BsonDocument()) //se envia un elemento vacio
-            .Result.ToListAsync();
+        return (await _mongoConnection.GetConnection()
+            .GetCollection<UserDTO>("Users")
+            .FindAsync(new BsonDocument())) //se envia un elemento vacio
+            .ToList();
     }
 
     public async Task<UserDTO> GetById(string id)
     {
-        return await Collection
-            .FindAsync(new BsonDocument { { "_id", new ObjectId(id) } })
-            .Result.FirstAsync();
+        return (await _mongoConnection.GetConnection()
+            .GetCollection<UserDTO>("Users")
+            .FindAsync(new BsonDocument { { "_id", new ObjectId(id) } }))
+            .First();
     }
 
     public async Task Insert(UserDTO user)
     {
-        await Collection.InsertOneAsync(user);
+        await _mongoConnection.GetConnection()
+            .GetCollection<UserDTO>("Users").InsertOneAsync(user);
     }
 
     public async Task Update(UserDTO user)
@@ -49,6 +54,7 @@ public class UserRepository : IUserRepository
             .Filter
             .Eq(x => x.UserId, user.UserId);
 
-        await Collection.ReplaceOneAsync(filter, user);
+        await _mongoConnection.GetConnection()
+            .GetCollection<UserDTO>("Users").ReplaceOneAsync(filter, user);
     }
 }
