@@ -1,5 +1,6 @@
 ﻿namespace Commerce.Core.Helpers.Middleware
 {
+    using Commerce.Core.Exceptions;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
     using System.Net;
@@ -27,6 +28,10 @@
             try
             {
                 await nextMiddleware.Invoke(context);
+            }
+            catch (AppException exception)
+            {
+                await SendPayload(context, Envelope.Error(exception.Message), exception.StatusCode);
             }
             catch (Exception exception)
             {

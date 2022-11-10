@@ -11,6 +11,19 @@
 
         private string DataBaseName;
 
+        public IMongoDatabase Database;
+
+        public MongoDataContext()
+        {
+            _client = new MongoClient("mongodb://127.0.0.1:8959");
+            Database = _client.GetDatabase("CommerceDB");
+        }
+
+        /*
+         * OBS: no se como usar el constructor de abajo
+         * ¿Cuando instancio una clase con IConfiguration como paso el parametro?
+         */
+
         public MongoDataContext(IConfiguration configuration)
         {
             _client = new MongoClient(configuration.GetValue<string>("Databases:Mongo:ConnectionString"));

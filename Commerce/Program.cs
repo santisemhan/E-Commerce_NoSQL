@@ -1,6 +1,10 @@
 using Commerce.Core.Helpers.Middleware;
+using Commerce.Core.Repositories;
 using Commerce.Core.Repositories.Contexts;
 using Commerce.Core.Repositories.Contexts.Interfaces;
+using Commerce.Core.Repositories.Interfaces;
+using Commerce.Core.Services;
+using Commerce.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Localization;
 using MongoDB.Driver;
 using System.Globalization;
@@ -30,6 +34,14 @@ services.Configure<RequestLocalizationOptions>(opts => {
 
 services.AddTransient<IConnection<IMongoDatabase>, MongoDataContext>();
 services.AddTransient<IConnection<Cassandra.ISession>, CassandraDataContext>();
+
+//Repositorios
+services.AddTransient<IUserRepository, UserRepository>();
+services.AddTransient<IProductRepository, ProductRepository>();
+
+//Servicios
+services.AddTransient<IUserService, UserService>();
+services.AddTransient<IProductService, ProductService>();
 
 var app = builder.Build();
 
