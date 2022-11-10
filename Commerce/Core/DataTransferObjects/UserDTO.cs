@@ -1,8 +1,12 @@
-﻿namespace Cart.Core.DataTransferObjects
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace Cart.Core.DataTransferObjects
 {
     public class UserDTO
     {
-        public string UserId { get; set; }
+        [BsonId]
+        public ObjectId UserId { get; set; }
 
         public string Name { get; set; }
 

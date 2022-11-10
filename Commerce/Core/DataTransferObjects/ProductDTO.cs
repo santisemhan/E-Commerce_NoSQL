@@ -1,8 +1,12 @@
-﻿namespace Commerce.Core.DataTransferObjects
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace Commerce.Core.DataTransferObjects
 {
     public class ProductDTO
     {
-        public string ProductId { get; set; }
+        [BsonId]
+        public ObjectId ProductId { get; set; }
 
         public string ProductName { get; set; }
       
