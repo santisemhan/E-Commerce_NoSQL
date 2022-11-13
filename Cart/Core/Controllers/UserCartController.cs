@@ -29,6 +29,13 @@
             return NoContent();
         }
 
+        [HttpPut]
+        public async Task<IActionResult> RestoreCart([FromQuery] Guid userId, [FromQuery] Guid logId)
+        {
+            await _userCartService.RestoreCart(userId, logId);
+            return NoContent();
+        }
+
         [HttpPost]
         [Route("checkout")]
         public async Task<IActionResult> Checkout([FromBody] UserCartDTO checkoutInfo)

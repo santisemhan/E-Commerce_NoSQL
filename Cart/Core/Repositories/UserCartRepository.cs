@@ -23,6 +23,7 @@
 
         public async Task ChangeUserCartAsync(UserCartDTO info)
         {
+            var processId = Guid.NewGuid();
             var userId = info.User.UserId;
 
             await _redisConnection.GetConnection()
@@ -33,16 +34,18 @@
                 var productKey = $"userCart:{userId}:{product.ProductCatalogId}";
                 await _redisConnection.GetConnection()
                     .HashSetAsync(productKey, product.ToHashEntries());
+
+                var query = await _cassandraConnection.GetConnection()
+                    .PrepareAsync(@"INSERT INTO cart (id, moment, userId, imageurl, price, productcatalogid, productname, quantity) 
+                                    VALUES (?,?,?,?,?,?,?,?)");
+
+                _cassandraConnection.GetConnection()
+                    .Execute(query.Bind(processId, DateTime.Now, info.User.UserId, product.ImageURL, product.Price, 
+                        product.ProductCatalogId, product.ProductName, product.Quantity));
             }
 
             await _redisConnection.GetConnection()
                 .StringSetAsync($"userCart:{userId}", string.Join(",", info.Products.Select(p => p.ProductCatalogId.ToString())));
-
-            //var query = await _cassandraConnection.GetConnection()
-            //    .PrepareAsync("INSERT INTO UserCart (userId) VALUES (?)");
-
-            //_cassandraConnection.GetConnection()
-            //    .Execute(query.Bind(info.User.UserId));
         }
 
         public async Task<UserCartDTO?> GetUserCartAsync(Guid userId)
@@ -71,6 +74,37 @@
             }
           
             return result;
+        }
+
+        public async Task RestoreCart(Guid userId, Guid logId)
+        {
+            var processId = Guid.NewGuid();
+            var productsCatalogId = new List<string>();
+
+            var query = _cassandraConnection.GetConnection()
+                .Execute(@$"SELECT * FROM cart
+                            WHERE id = {logId}");
+
+            foreach (var row in query)
+            {
+                var product = new ProductCartDTO(row);
+                productsCatalogId.Add(product.ProductCatalogId.ToString());
+
+                var productKey = $"userCart:{userId}:{product.ProductCatalogId}";
+                await _redisConnection.GetConnection()
+                    .HashSetAsync(productKey, product.ToHashEntries());
+
+                var addQuery = await _cassandraConnection.GetConnection()
+                    .PrepareAsync(@"INSERT INTO cart (id, moment, userId, imageurl, price, productcatalogid, productname, quantity) 
+                                        VALUES (?,?,?,?,?,?,?,?)");
+
+                _cassandraConnection.GetConnection()
+                    .Execute(addQuery.Bind(processId, DateTime.Now, userId, product.ImageURL, product.Price,
+                        product.ProductCatalogId, product.ProductName, product.Quantity));
+            }
+
+            await _redisConnection.GetConnection()
+                .StringSetAsync($"userCart:{userId}", string.Join(",", productsCatalogId));
         }
     }
 }

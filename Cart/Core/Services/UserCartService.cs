@@ -24,5 +24,10 @@
         {
             return await _userCartRepository.GetUserCartAsync(userId);
         }
+
+        public async Task RestoreCart(Guid userId, Guid logId)
+        {
+            await _userCartRepository.RestoreCart(userId, logId);
+        }
     }
 }

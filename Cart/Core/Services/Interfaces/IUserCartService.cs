@@ -7,5 +7,7 @@
         Task<UserCartDTO?> GetUserCartAsync(Guid userId);
 
         Task ChangeUserCart(UserCartDTO userCartInfo);
+
+        Task RestoreCart(Guid userId, Guid logId);
     }
 }

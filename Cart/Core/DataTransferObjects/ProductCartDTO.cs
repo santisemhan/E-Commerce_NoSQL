@@ -1,5 +1,6 @@
 ﻿namespace Cart.Core.DataTransferObjects
 {
+    using Cassandra;
     using StackExchange.Redis;
 
     public class ProductCartDTO
@@ -15,6 +16,15 @@
         public double Price { get; set; }
 
         public ProductCartDTO() { }
+
+        public ProductCartDTO(Row row) 
+        {
+            ProductCatalogId = row.GetValue<Guid>(nameof(ProductCatalogId).ToLower());
+            ProductName = row.GetValue<string>(nameof(ProductName).ToLower());
+            ImageURL = row.GetValue<string>(nameof(ImageURL).ToLower());
+            Quantity = row.GetValue<int>(nameof(Quantity).ToLower());
+            Price = row.GetValue<double>(nameof(Price).ToLower());
+        }
 
         public HashEntry[] ToHashEntries()
         {
