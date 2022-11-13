@@ -14,6 +14,8 @@
                         .WithCredentials(configuration.GetValue<string>("Databases:Cassandra:ClientID"), configuration.GetValue<string>("Databases:Cassandra:ClientSecret"))
                         .Build()
                         .Connect();
+
+            _session.ChangeKeyspace(configuration.GetValue<string>("Databases:Cassandra:KeySpace"));
         }
 
         public ISession GetConnection()

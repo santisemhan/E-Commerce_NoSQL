@@ -18,7 +18,6 @@
         {
             _redisConnection = redisConnection;
             _cassandraConnection = cassandraConnection;
-            _cassandraConnection.GetConnection().ChangeKeyspace("usercart");
         }
 
         public async Task ChangeUserCartAsync(UserCartDTO info)
