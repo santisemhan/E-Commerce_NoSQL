@@ -28,6 +28,15 @@
             await _redisConnection.GetConnection()
                 .HashSetAsync($"user:{userId}", info.User.ToHashEntries());
 
+            var userProductsId = await _redisConnection.GetConnection()
+                .SetMembersAsync($"userCart:{userId}");
+
+            foreach(var product in userProductsId.Where(p => !info.Products.Any(pr => pr.ProductCatalogId.ToString() == p.ToString())))
+            {
+                await _redisConnection.GetConnection()
+                    .SetRemoveAsync($"userCart:{userId}", product);
+            }
+
             foreach (var product in info.Products)
             {
                 var productKey = $"userCart:{userId}:{product.ProductCatalogId}";
@@ -41,10 +50,10 @@
                 _cassandraConnection.GetConnection()
                     .Execute(query.Bind(processId, DateTime.Now, info.User.UserId, product.ImageURL, product.Price, 
                         product.ProductCatalogId, product.ProductName, product.Quantity));
-            }
 
-            await _redisConnection.GetConnection()
-                .StringSetAsync($"userCart:{userId}", string.Join(",", info.Products.Select(p => p.ProductCatalogId.ToString())));
+                await _redisConnection.GetConnection()
+                .SetAddAsync($"userCart:{userId}", new RedisValue(product.ProductCatalogId.ToString()));
+            }
         }
 
         public async Task<UserCartDTO?> GetUserCartAsync(Guid userId)
@@ -59,17 +68,15 @@
 
             result.AddUserData(userId, userInfo);
 
-            var userProductsId = (await _redisConnection.GetConnection()
-                .StringGetAsync($"userCart:{userId}")).ToString()
-                .Split(",")
-                .ToList();
+            var userProductsId = await _redisConnection.GetConnection()
+                .SetMembersAsync($"userCart:{userId}");
 
             foreach (var productCartId in userProductsId)
             {
                 var productInfo = await _redisConnection.GetConnection()
                     .HashGetAllAsync($"userCart:{userId}:{productCartId}");
 
-                result.AddProductData(Guid.Parse(productCartId), productInfo);
+                result.AddProductData(Guid.Parse(productCartId.ToString()), productInfo);
             }
           
             return result;
