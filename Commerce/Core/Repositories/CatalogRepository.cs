@@ -50,7 +50,7 @@ public class CatalogRepository : ICatalogRepository
         var log = new List<ProductCatalogDTO>();
 
         var query = _cassandraConnection.GetConnection()
-            .Execute($@"SELECT * FROM catalog WHERE productCatalogIdGuid = {id}");
+            .Execute($@"SELECT * FROM catalog WHERE id = {id}");
 
         foreach (var row in query) {
             var catalog = new ProductCatalogDTO(row);

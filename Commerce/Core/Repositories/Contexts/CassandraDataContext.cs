@@ -8,29 +8,24 @@
     {
         // SEE: https://www.youtube.com/watch?v=GlDERX0B5HY&ab_channel=DevNinja
 
-        private ICluster _cluster;
+        private ISession _session;
 
         private string KeySpaceName;
 
         public CassandraDataContext(IConfiguration configuration)
         {
-            _cluster = Cluster.Builder()
-                .AddContactPoint(configuration.GetValue<string>("Databases:Cassandra:ConnectionString"))
-                .WithPort(configuration.GetValue<int>("Databases:Cassandra:Port"))
-                .Build();
+            _session = Cluster.Builder()
+                         .WithCloudSecureConnectionBundle(@"C:\Users\gonza\Documents\Programacion\secure-connect-e-commerce-bd2.zip")
+                         .WithCredentials(configuration.GetValue<string>("Databases:Cassandra:ClientID"), configuration.GetValue<string>("Databases:Cassandra:ClientSecret"))
+                         .Build()
+                         .Connect();
 
-            KeySpaceName = configuration.GetValue<string>("Databases:Cassandra:KeySpace");
-
-            // Example for entities
-            // For<Post>().TableName("posts").PartitionKey(u => u.Id)
-            //  .Column(x => x.Id)
-            //  .Column(x => x.Title)
-            //  .Column(x => x.Body)
+            _session.ChangeKeyspace(configuration.GetValue<string>("Databases:Cassandra:KeySpace"));
         }
 
         public ISession GetConnection()
         {
-            return _cluster.Connect(KeySpaceName);
+            return _session;
         }
     }
 }

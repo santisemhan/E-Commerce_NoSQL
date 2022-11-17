@@ -44,18 +44,21 @@ public class OrderRepository : IOrderRepository
 
     public async Task Insert(OrderDTO order)
     {
-        var result = await _mongoConnection.GetConnection()
+        await _mongoConnection.GetConnection()
             .GetCollection<OrderDTO>("Orders")
             .WithWriteConcern(WriteConcern.W1)
             .InsertOneAsync(order);
-
-        if (result == null) await _mongoConnection.GetConnection()
-                .GetCollection<OrderDTO>("Orders")
-                .Rol
     }
 
     public async Task Update(OrderDTO order)
     {
-        throw new NotImplementedException();
+        var filter = Builders<OrderDTO>
+            .Filter
+            .Eq(x => x.OrderId, order.OrderId);
+
+        await _mongoConnection.GetConnection()
+            .GetCollection<OrderDTO>("Orders")
+            .ReplaceOneAsync(filter, order);
     }
+}
 }
