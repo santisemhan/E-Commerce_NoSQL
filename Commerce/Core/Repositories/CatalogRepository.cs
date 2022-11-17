@@ -45,8 +45,9 @@ public class CatalogRepository : ICatalogRepository
            .First();
     }
 
-    public Task<List<ProductCatalogDTO>> GetLogById(Guid id)
+    public async Task<List<ProductCatalogDTO>> GetLogById(Guid id)
     {
+
         var log = new List<ProductCatalogDTO>();
 
         var query = _cassandraConnection.GetConnection()

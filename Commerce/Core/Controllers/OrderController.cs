@@ -42,7 +42,7 @@ public class OrderController : ControllerBase
     {
         if (order == null) { return BadRequest(); }
 
-        await orderService.UpdateOrder(order, order);
+        await orderService.UpdateOrder(order, id);
 
         return NoContent();
     }

@@ -36,12 +36,19 @@ services.AddTransient<IConnection<IMongoDatabase>, MongoDataContext>();
 services.AddTransient<IConnection<Cassandra.ISession>, CassandraDataContext>();
 
 //Repositorios
-services.AddTransient<IUserRepository, UserRepository>();
+services.AddTransient<ICatalogRepository, CatalogRepository>();
+services.AddTransient<IOrderRepository, OrderRepository>();
+services.AddTransient<IPaymentRepository, PaymentRepository>();
 services.AddTransient<IProductRepository, ProductRepository>();
+services.AddTransient<IUserRepository, UserRepository>();
 
 //Servicios
-services.AddTransient<IUserService, UserService>();
+services.AddTransient<ICatalogService, CatalogService>();
+services.AddTransient<IOrderService, OrderService>();
+services.AddTransient<IPaymentService, PaymentService>();
 services.AddTransient<IProductService, ProductService>();
+services.AddTransient<IUserService, UserService>();
+
 
 var app = builder.Build();
 

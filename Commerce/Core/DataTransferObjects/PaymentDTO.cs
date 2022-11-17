@@ -1,10 +1,13 @@
 ﻿namespace Commerce.Core.DataTransferObjects
 {
     using Cart.Core.DataTransferObjects;
+    using MongoDB.Bson;
+    using MongoDB.Bson.Serialization.Attributes;
 
     public class PaymentDTO
     {
-        public string PaymentId { get; set; }
+        [BsonId]
+        public ObjectId PaymentId { get; set; }
 
         public string OrderId { get; set; }
 
