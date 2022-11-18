@@ -22,7 +22,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetProductById(string id)
+    public async Task<IActionResult> GetProductById(Guid id)
     {
         return Ok(await productService.GetProductById(id));
     }
@@ -38,7 +38,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateProduct([FromBody] ProductDTO product, string id)
+    public async Task<IActionResult> UpdateProduct([FromBody] ProductDTO product, Guid id)
     {
         if (product == null) { return BadRequest(); }
 
@@ -48,7 +48,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteProduct(string id)
+    public async Task<IActionResult> DeleteProduct(Guid id)
     {
         await productService.DeleteProduct(id);
         return NoContent();

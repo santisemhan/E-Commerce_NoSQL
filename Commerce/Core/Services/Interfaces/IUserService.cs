@@ -1,12 +1,12 @@
-﻿using Cart.Core.DataTransferObjects;
+﻿using Commerce.Core.DataTransferObjects;
 
 namespace Commerce.Core.Services.Interfaces;
 
 public interface IUserService
 {
     Task<List<UserDTO>> GetAllUsers();
-    Task<UserDTO> GetUserById(string id);
+    Task<UserDTO> GetUserById(Guid id);
     Task InsertUser(UserDTO user);
-    Task UpdateUser(UserDTO user, string id);
-    Task DeleteUser(string id);
+    Task UpdateUser(UserDTO user, Guid id);
+    Task DeleteUser(Guid id);
 }

@@ -5,7 +5,7 @@ namespace Commerce.Core.Services.Interfaces
     public interface IPaymentService
     {
         Task<List<PaymentDTO>> GetAllPayments();
-        Task<PaymentDTO> GetPaymentById(string id);
-        Task InsertPayment(string orderId, string userId, string paymentType);
+        Task<PaymentDTO> GetPaymentById(Guid id);
+        Task InsertPayment(Guid orderId, Guid userId, string paymentType);
     }
 }

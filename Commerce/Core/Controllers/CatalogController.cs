@@ -22,7 +22,7 @@ public class CatalogController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetCatalogById(string id)
+    public async Task<IActionResult> GetCatalogById(Guid id)
     {
         return Ok(await catalogService.GetCatalogById(id));
     }
@@ -44,7 +44,7 @@ public class CatalogController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateCatalog([FromBody] ProductCatalogDTO catalog, string id)
+    public async Task<IActionResult> UpdateCatalog([FromBody] ProductCatalogDTO catalog, Guid id)
     {
         if (catalog == null) { return BadRequest(); }
 
@@ -54,7 +54,7 @@ public class CatalogController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCatalog(string id)
+    public async Task<IActionResult> DeleteCatalog(Guid id)
     {
         await catalogService.DeleteCatalog(id);
         return NoContent();

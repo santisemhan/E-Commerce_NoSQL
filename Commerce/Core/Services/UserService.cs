@@ -1,4 +1,4 @@
-﻿using Cart.Core.DataTransferObjects;
+﻿using Commerce.Core.DataTransferObjects;
 using Commerce.Core.Exceptions;
 using Commerce.Core.Repositories.Interfaces;
 using Commerce.Core.Services.Interfaces;
@@ -15,7 +15,7 @@ public class UserService : IUserService
         this.userRepository = userRepository;
     }
 
-    public async Task DeleteUser(string id)
+    public async Task DeleteUser(Guid id)
     {
         await GetUserById(id);
         await userRepository.Delete(id);
@@ -26,7 +26,7 @@ public class UserService : IUserService
         return await userRepository.GetAll();
     }
 
-    public async Task<UserDTO> GetUserById(string id)
+    public async Task<UserDTO> GetUserById(Guid id)
     {
         var user = await userRepository.GetById(id);
         if (user is null)
@@ -41,10 +41,10 @@ public class UserService : IUserService
         await userRepository.Insert(user);
     }
 
-    public async Task UpdateUser(UserDTO user, string id)
+    public async Task UpdateUser(UserDTO user, Guid id)
     {
         await GetUserById(id);
-        user.UserId = new MongoDB.Bson.ObjectId(id);
+        user.UserId = id;
         await userRepository.Update(user);
     }
 }

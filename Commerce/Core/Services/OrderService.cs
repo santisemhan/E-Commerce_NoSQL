@@ -13,7 +13,7 @@ public class OrderService : IOrderService
     {
         this.orderRepository = orderRepository;
     }
-    public async Task DeleteOrder(string id)
+    public async Task DeleteOrder(Guid id)
     {
         await orderRepository.Delete(id);
     }
@@ -23,7 +23,7 @@ public class OrderService : IOrderService
         return await orderRepository.GetAll();
     }
 
-    public async Task<OrderDTO> GetOrderById(string id)
+    public async Task<OrderDTO> GetOrderById(Guid id)
     {
         var order = await orderRepository.GetById(id);
         if (order is null)
@@ -38,10 +38,10 @@ public class OrderService : IOrderService
         await orderRepository.Insert(order);
     }
 
-    public async Task UpdateOrder(OrderDTO order, string id)
+    public async Task UpdateOrder(OrderDTO order, Guid id)
     {
         await GetOrderById(id);
-        order.OrderId = new MongoDB.Bson.ObjectId(id);
+        order.OrderId = id;
         await orderRepository.Update(order);
     }
 }

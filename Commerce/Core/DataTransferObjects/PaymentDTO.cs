@@ -1,20 +1,19 @@
-﻿namespace Commerce.Core.DataTransferObjects
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace Commerce.Core.DataTransferObjects;
+
+
+public class PaymentDTO
 {
-    using Cart.Core.DataTransferObjects;
-    using MongoDB.Bson;
-    using MongoDB.Bson.Serialization.Attributes;
+    [BsonId]
+    [BsonRepresentation(MongoDB.Bson.BsonType.String)]
+    public Guid PaymentId { get; set; }
 
-    public class PaymentDTO
-    {
-        [BsonId]
-        public ObjectId PaymentId { get; set; }
+    public Guid OrderId { get; set; }
 
-        public string OrderId { get; set; }
+    public UserDTO User { get; set; }
 
-        public UserDTO User { get; set; }
+    public DateTime TimeStamp { get; set; }
 
-        public DateTime TimeStamp { get; set; }
-
-        public string PaymentType { get; set; }
-    }
+    public string PaymentType { get; set; }
 }

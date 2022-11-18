@@ -24,7 +24,7 @@ public class PaymentService : IPaymentService
         return await paymentRepository.GetAll();
     }
 
-    public async Task<PaymentDTO> GetPaymentById(string id)
+    public async Task<PaymentDTO> GetPaymentById(Guid id)
     {
         var payment = await paymentRepository.GetById(id);
         if(payment is null)
@@ -33,10 +33,11 @@ public class PaymentService : IPaymentService
         }
         return payment;
     }
-    public async Task InsertPayment(string orderId, string userId,string paymentType)
+    public async Task InsertPayment(Guid orderId, Guid userId,string paymentType)
     {
         await orderService.GetOrderById(orderId); //existe la orden?
 
+        
         var user = await userService.GetUserById(userId);
 
         PaymentDTO newPayment = new()

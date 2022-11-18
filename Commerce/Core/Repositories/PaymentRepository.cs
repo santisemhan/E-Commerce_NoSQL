@@ -23,12 +23,13 @@ public class PaymentRepository : IPaymentRepository
             .ToList();
     }
 
-    public async Task<PaymentDTO> GetById(string id)
+    public async Task<PaymentDTO> GetById(Guid id)
     {
-        return (await _mongoConnection.GetConnection()
-            .GetCollection<PaymentDTO>("Payments")
-            .FindAsync(new BsonDocument { { "_id", new ObjectId(id) } }))
-            .First();
+        var filter = Builders<PaymentDTO>.Filter.Eq(x => x.PaymentId, id);
+
+        return await _mongoConnection.GetConnection()
+            .GetCollection<PaymentDTO>("Users")
+            .Find(filter).SingleAsync();
     }
 
     public async Task Insert(PaymentDTO newPayment)

@@ -22,14 +22,14 @@ namespace Commerce.Core.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPaymentById(string id)
+        public async Task<IActionResult> GetPaymentById(Guid id)
         {
             
             return Ok(await paymentService.GetPaymentById(id));
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePayment(string orderId, string userId, string paymentType)
+        public async Task<IActionResult> CreatePayment(Guid orderId, Guid userId, string paymentType)
         {
             await paymentService.InsertPayment(orderId, userId, paymentType);
 

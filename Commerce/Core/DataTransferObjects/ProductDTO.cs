@@ -6,7 +6,8 @@ namespace Commerce.Core.DataTransferObjects
     public class ProductDTO
     {
         [BsonId]
-        public ObjectId ProductId { get; set; }
+        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
+        public Guid ProductId { get; set; }
 
         public string ProductName { get; set; }
       

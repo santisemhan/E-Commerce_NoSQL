@@ -6,8 +6,8 @@ namespace Commerce.Core.Services.Interfaces;
 public interface IOrderService
 {
     Task<List<OrderDTO>> GetAllOrders();
-    Task<OrderDTO> GetOrderById(string id);
+    Task<OrderDTO> GetOrderById(Guid id);
     Task InsertOrder(OrderDTO order);
-    Task UpdateOrder(OrderDTO order, string id);
-    Task DeleteOrder(string id);
+    Task UpdateOrder(OrderDTO order, Guid id);
+    Task DeleteOrder(Guid id);
 }
