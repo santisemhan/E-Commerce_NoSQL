@@ -15,7 +15,7 @@ public class CatalogService : ICatalogService
         this.catalogRepository = catalogRepository;
     }
 
-    public async Task DeleteCatalog(string id)
+    public async Task DeleteCatalog(Guid id)
     {
         await GetCatalogById(id);
         await catalogRepository.Delete(id);
@@ -26,7 +26,7 @@ public class CatalogService : ICatalogService
         return await catalogRepository.GetAll();
     }
 
-    public async Task<ProductCatalogDTO> GetCatalogById(string id)
+    public async Task<ProductCatalogDTO> GetCatalogById(Guid id)
     {
         var catalog =  await catalogRepository.GetById(id);
         if (catalog is null)
@@ -47,10 +47,10 @@ public class CatalogService : ICatalogService
         await catalogRepository.InsertLog(catalog);
     }
 
-    public async Task UpdateCatalog(ProductCatalogDTO catalog, string id)
+    public async Task UpdateCatalog(ProductCatalogDTO catalog, Guid id)
     {
         await GetCatalogById(id);
-        catalog.ProductCatalogId = new MongoDB.Bson.ObjectId(id);
+        catalog.ProductCatalogId = id;
         await catalogRepository.Update(catalog);
         await catalogRepository.InsertLog(catalog);
     }

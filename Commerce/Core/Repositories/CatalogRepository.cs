@@ -18,7 +18,7 @@ public class CatalogRepository : ICatalogRepository
         _cassandraConnection = cassandraConnection;
     }
 
-    public async Task Delete(string catalog)
+    public async Task Delete(Guid catalog)
     {
         var filter = Builders<ProductCatalogDTO>
             .Filter
@@ -37,16 +37,18 @@ public class CatalogRepository : ICatalogRepository
             .ToList();
     }
 
-    public async Task<ProductCatalogDTO> GetById(string id)
+    public async Task<ProductCatalogDTO> GetById(Guid id)
     {
-        return (await _mongoConnection.GetConnection()
-           .GetCollection<ProductCatalogDTO>("ProductCatalogs")
-           .FindAsync(new BsonDocument { { "_id", new ObjectId(id) } }))
-           .First();
+        var filter = Builders<ProductCatalogDTO>.Filter.Eq(x => x.ProductCatalogId, id);
+
+        return await _mongoConnection.GetConnection()
+            .GetCollection<ProductCatalogDTO>("Users")
+            .Find(filter).SingleAsync();
     }
 
-    public Task<List<ProductCatalogDTO>> GetLogById(Guid id)
+    public async Task<List<ProductCatalogDTO>> GetLogById(Guid id)
     {
+
         var log = new List<ProductCatalogDTO>();
 
         var query = _cassandraConnection.GetConnection()

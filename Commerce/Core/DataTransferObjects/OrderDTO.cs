@@ -1,12 +1,12 @@
 ﻿namespace Commerce.Core.DataTransferObjects
 {
-    using Cart.Core.DataTransferObjects;
-    using MongoDB.Bson;
+    using MongoDB.Bson.Serialization.Attributes;
 
     public class OrderDTO
     {
-        public ObjectId OrderId { get; set; }
-        public Guid OrderIdGuid { get; set; }
+        [BsonId]
+        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
+        public Guid OrderId { get; set; }
 
         public DateTime TimeStamp { get; set; }
 

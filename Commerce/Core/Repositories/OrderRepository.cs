@@ -15,11 +15,11 @@ public class OrderRepository : IOrderRepository
         _mongoConnection = mongoConnection;
     }
 
-    public async Task Delete(string order)
+    public async Task Delete(Guid order)
     {
         var filter = Builders<OrderDTO>
-           .Filter
-           .Eq(x => x.OrderId, new ObjectId(order));
+            .Filter
+            .Eq(x => x.OrderId, order);
 
         await _mongoConnection.GetConnection()
             .GetCollection<OrderDTO>("Orders")
@@ -34,20 +34,28 @@ public class OrderRepository : IOrderRepository
            .ToList();
     }
 
-    public async Task<OrderDTO> GetById(string id)
+    public async Task<OrderDTO> GetById(Guid id)
     {
-        return (await _mongoConnection.GetConnection()
+        var filter = Builders<OrderDTO>
+            .Filter
+            .Eq(x => x.OrderId, id);
+
+        return await _mongoConnection.GetConnection()
            .GetCollection<OrderDTO>("Orders")
-           .FindAsync(new BsonDocument { { "_id", new ObjectId(id) } }))
-           .First();
+           .Find(filter).SingleAsync();
     }
+
 
     public async Task Insert(OrderDTO order)
     {
-        await _mongoConnection.GetConnection()
+       /* var result = await _mongoConnection.GetConnection()
             .GetCollection<OrderDTO>("Orders")
             .WithWriteConcern(WriteConcern.W1)
             .InsertOneAsync(order);
+
+        if (result == null) await _mongoConnection.GetConnection()
+                .GetCollection<OrderDTO>("Orders")
+                .Rol */
     }
 
     public async Task Update(OrderDTO order)
@@ -57,7 +65,7 @@ public class OrderRepository : IOrderRepository
             .Eq(x => x.OrderId, order.OrderId);
 
         await _mongoConnection.GetConnection()
-            .GetCollection<OrderDTO>("Orders")
+            .GetCollection<OrderDTO>("Users")
             .ReplaceOneAsync(filter, order);
     }
 }

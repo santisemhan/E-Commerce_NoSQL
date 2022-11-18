@@ -15,7 +15,7 @@ public class ProductService : IProductService
         this.productRepository = productRepository;
     }
 
-    public async Task DeleteProduct(string id)
+    public async Task DeleteProduct(Guid id)
     {
         await GetProductById(id);
         await productRepository.Delete(id);
@@ -26,7 +26,7 @@ public class ProductService : IProductService
         return await productRepository.GetAll();
     }
 
-    public async Task<ProductDTO> GetProductById(string id)
+    public async Task<ProductDTO> GetProductById(Guid id)
     {
         var product = await productRepository.GetById(id);
         if (product is null)
@@ -41,10 +41,10 @@ public class ProductService : IProductService
         await productRepository.Insert(product);
     }
 
-    public async Task UpdateProduct(ProductDTO product, string id)
+    public async Task UpdateProduct(ProductDTO product, Guid id)
     {
         await GetProductById(id);
-        product.ProductId = new MongoDB.Bson.ObjectId(id);
+        product.ProductId = id; 
         await productRepository.Update(product);
     }
 }

@@ -22,7 +22,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetOrderById(string id)
+    public async Task<IActionResult> GetOrderById(Guid id)
     {
         return Ok(await orderService.GetOrderById(id));
     }
@@ -38,17 +38,17 @@ public class OrderController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateOrder([FromBody] OrderDTO order, string id)
+    public async Task<IActionResult> UpdateOrder([FromBody] OrderDTO order, Guid id)
     {
         if (order == null) { return BadRequest(); }
 
-        await orderService.UpdateOrder(order, order);
+        await orderService.UpdateOrder(order, id);
 
         return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteOrder(string id)
+    public async Task<IActionResult> DeleteOrder(Guid id)
     {
         await orderService.DeleteOrder(id);
         return NoContent();

@@ -1,4 +1,4 @@
-﻿using Cart.Core.DataTransferObjects;
+﻿using Commerce.Core.DataTransferObjects;
 using Commerce.Core.Repositories.Contexts.Interfaces;
 using Commerce.Core.Repositories.Interfaces;
 using MongoDB.Bson;
@@ -15,11 +15,11 @@ public class UserRepository : IUserRepository
         _mongoConnection = mongoConnection;
     }
 
-    public async Task Delete(string id)
+    public async Task Delete(Guid id)
     {
         var filter = Builders<UserDTO>
             .Filter
-            .Eq(x => x.UserId, new ObjectId(id));
+            .Eq(x => x.UserId, id);
 
         await _mongoConnection.GetConnection()
             .GetCollection<UserDTO>("Users")
@@ -34,12 +34,13 @@ public class UserRepository : IUserRepository
             .ToList();
     }
 
-    public async Task<UserDTO> GetById(string id)
+    public async Task<UserDTO> GetById(Guid id)
     {
-        return (await _mongoConnection.GetConnection()
+        var filter = Builders<UserDTO>.Filter.Eq(x => x.UserId, id);
+
+        return await _mongoConnection.GetConnection()
             .GetCollection<UserDTO>("Users")
-            .FindAsync(new BsonDocument { { "_id", new ObjectId(id) } }))
-            .First();
+            .Find(filter).SingleAsync();
     }
 
     public async Task Insert(UserDTO user)

@@ -1,4 +1,4 @@
-﻿using Cart.Core.DataTransferObjects;
+﻿using Commerce.Core.DataTransferObjects;
 using Commerce.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,13 +17,13 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllUsers()
+    public async Task<IActionResult> GetAllUsers() //ActionResult<List<UserDTO>>
     {
         return Ok(await userService.GetAllUsers());
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetUserById(string id)
+    public async Task<IActionResult> GetUserById(Guid id)
     {
         return Ok(await userService.GetUserById(id));
     }
@@ -39,7 +39,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateUser([FromBody] UserDTO user, string id)
+    public async Task<IActionResult> UpdateUser([FromBody] UserDTO user, Guid id)
     {
         if (user == null) { return BadRequest(); }
 
@@ -49,7 +49,7 @@ public class UserController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUser(string id)
+    public async Task<IActionResult> DeleteUser(Guid id)
     {
         await userService.DeleteUser(id);
         return NoContent();

@@ -15,11 +15,11 @@ public class ProductRepository : IProductRepository
         _mongoConnection = mongoConnection;
     }
 
-    public async Task Delete(string id)
+    public async Task Delete(Guid id)
     {
         var filter = Builders<ProductDTO>
             .Filter
-            .Eq(x => x.ProductId, new ObjectId(id));
+            .Eq(x => x.ProductId, id);
 
         await _mongoConnection.GetConnection()
             .GetCollection<ProductDTO>("Products")
@@ -34,12 +34,13 @@ public class ProductRepository : IProductRepository
             .ToList();
     }
 
-    public async Task<ProductDTO> GetById(string id)
+    public async Task<ProductDTO> GetById(Guid id)
     {
-        return (await _mongoConnection.GetConnection()
-            .GetCollection<ProductDTO>("Products")
-            .FindAsync(new BsonDocument { { "_id", new ObjectId(id) } }))
-            .First();
+        var filter = Builders<ProductDTO>.Filter.Eq(x => x.ProductId, id);
+
+        return await _mongoConnection.GetConnection()
+            .GetCollection<ProductDTO>("Users")
+            .Find(filter).SingleAsync();
     }
 
     public async Task Insert(ProductDTO product)
