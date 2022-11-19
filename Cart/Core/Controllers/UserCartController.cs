@@ -22,6 +22,14 @@
             return Ok(result);
         }
 
+        [HttpGet]
+        [Route("activity")]
+        public async Task<IActionResult> GetUserActivity([FromQuery] Guid userId)
+        {
+            var result = await _userCartService.GetUserActivityAsync(userId);
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<IActionResult> ChangeUserCart([FromBody] UserCartDTO userCartInfo)
         {
@@ -38,9 +46,9 @@
 
         [HttpPost]
         [Route("checkout")]
-        public async Task<IActionResult> Checkout([FromBody] UserCartDTO checkoutInfo)
+        public async Task<IActionResult> Checkout([FromQuery] Guid userId)
         {
-            await _userCartService.Checkout(checkoutInfo);
+            await _userCartService.Checkout(userId);
             return NoContent();
         }
     }
