@@ -100,6 +100,9 @@
                 await _redisConnection.GetConnection()
                     .HashSetAsync(productKey, product.ToHashEntries());
 
+                await _redisConnection.GetConnection()
+                    .SetAddAsync($"userCart:{userId}", new RedisValue(product.ProductCatalogId.ToString()));
+
                 var addQuery = await _cassandraConnection.GetConnection()
                     .PrepareAsync(@"INSERT INTO cart (id, moment, userId, imageurl, price, productcatalogid, productname, quantity) 
                                         VALUES (?,?,?,?,?,?,?,?)");
@@ -109,8 +112,14 @@
                         product.ProductCatalogId, product.ProductName, product.Quantity));
             }
 
-            await _redisConnection.GetConnection()
-                .StringSetAsync($"userCart:{userId}", string.Join(",", productsCatalogId));
+            var userProductsId = await _redisConnection.GetConnection()
+                .SetMembersAsync($"userCart:{userId}");
+
+            foreach (var product in userProductsId.Where(id => !productsCatalogId.Contains(id.ToString())))
+            {
+                await _redisConnection.GetConnection()
+                    .SetRemoveAsync($"userCart:{userId}", product);
+            }
         }
     }
 }
