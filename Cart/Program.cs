@@ -33,6 +33,11 @@ services.Configure<RequestLocalizationOptions>(opts => {
     opts.SupportedUICultures = supportedCultures;
 });
 
+services.AddHttpClient("commerce", options =>
+{
+    options.BaseAddress = new Uri("https://localhost:5003/api/");
+});
+
 // Databases Connections
 services.AddTransient<IConnection<IDatabase>, RedisDataContext>();
 services.AddTransient<IConnection<Cassandra.ISession>, CassandraDataContext>();
