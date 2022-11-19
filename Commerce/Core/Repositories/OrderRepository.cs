@@ -1,4 +1,4 @@
-﻿using Commerce.Core.DataTransferObjects;
+﻿using Commerce.Core.Models;
 using Commerce.Core.Repositories.Contexts.Interfaces;
 using Commerce.Core.Repositories.Interfaces;
 using MongoDB.Bson;
@@ -17,49 +17,61 @@ public class OrderRepository : IOrderRepository
 
     public async Task Delete(Guid order)
     {
-        var filter = Builders<OrderDTO>
+        var filter = Builders<Order>
             .Filter
             .Eq(x => x.OrderId, order);
 
         await _mongoConnection.GetConnection()
-            .GetCollection<OrderDTO>("Orders")
+            .GetCollection<Order>("Orders")
             .DeleteManyAsync(filter);
     }
 
-    public async Task<List<OrderDTO>> GetAll()
+    public async Task<List<Order>> GetAll()
     {
         return (await _mongoConnection.GetConnection()
-           .GetCollection<OrderDTO>("Orders")
+           .GetCollection<Order>("Orders")
            .FindAsync(new BsonDocument()))
            .ToList();
     }
 
-    public async Task<OrderDTO> GetById(Guid id)
+    public async Task<List<Order>> GetAllByStatus(bool status)
     {
-        var filter = Builders<OrderDTO>
+        var filter = Builders<Order>
+            .Filter
+            .Eq(x => x.OrderStatus, status);
+
+        return await _mongoConnection.GetConnection()
+           .GetCollection<Order>("Orders")
+           .Find(filter).ToListAsync();
+
+    }
+
+    public async Task<Order> GetById(Guid id)
+    {
+        var filter = Builders<Order>
             .Filter
             .Eq(x => x.OrderId, id);
 
         return await _mongoConnection.GetConnection()
-           .GetCollection<OrderDTO>("Orders")
+           .GetCollection<Order>("Orders")
            .Find(filter).SingleAsync();
     }
 
-    public async Task Insert(OrderDTO order)
+    public async Task Insert(Order order)
     {
         await _mongoConnection.GetConnection()
-            .GetCollection<OrderDTO>("Orders")
+            .GetCollection<Order>("Orders")
             .InsertOneAsync(order);
     }
 
-    public async Task Update(OrderDTO order)
+    public async Task Update(Order order)
     {
-        var filter = Builders<OrderDTO>
+        var filter = Builders<Order>
             .Filter
             .Eq(x => x.OrderId, order.OrderId);
 
         await _mongoConnection.GetConnection()
-            .GetCollection<OrderDTO>("Orders")
+            .GetCollection<Order>("Orders")
             .ReplaceOneAsync(filter, order);
     }
 }

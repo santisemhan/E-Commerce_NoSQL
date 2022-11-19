@@ -1,4 +1,6 @@
 ﻿using Commerce.Core.DataTransferObjects;
+using Commerce.Core.DataTransferObjects.Request;
+using Commerce.Core.Models;
 using Commerce.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +30,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateUser([FromBody] UserDTO user)
+    public async Task<IActionResult> CreateUser([FromBody] UserRequestDTO user)
     {
         if (user == null) { return BadRequest(); }
 
@@ -38,11 +40,11 @@ public class UserController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateUser([FromBody] UserDTO user, Guid id)
+    public async Task<IActionResult> UpdateUser([FromBody] User user)
     {
         if (user == null) { return BadRequest(); }
 
-        await userService.UpdateUser(user, id);
+        await userService.UpdateUser(user);
 
         return NoContent();
     }

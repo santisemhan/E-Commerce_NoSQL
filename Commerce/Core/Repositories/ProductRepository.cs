@@ -1,4 +1,4 @@
-﻿using Commerce.Core.DataTransferObjects;
+﻿using Commerce.Core.Models;
 using Commerce.Core.Repositories.Contexts.Interfaces;
 using Commerce.Core.Repositories.Interfaces;
 using MongoDB.Bson;
@@ -17,47 +17,47 @@ public class ProductRepository : IProductRepository
 
     public async Task Delete(Guid id)
     {
-        var filter = Builders<ProductDTO>
+        var filter = Builders<Product>
             .Filter
             .Eq(x => x.ProductId, id);
 
         await _mongoConnection.GetConnection()
-            .GetCollection<ProductDTO>("Products")
+            .GetCollection<Product>("Products")
             .DeleteOneAsync(filter);
     }
 
-    public async Task<List<ProductDTO>> GetAll()
+    public async Task<List<Product>> GetAll()
     {
         return (await _mongoConnection.GetConnection()
-            .GetCollection<ProductDTO>("Products")
+            .GetCollection<Product>("Products")
             .FindAsync(new BsonDocument()))
             .ToList();
     }
 
-    public async Task<ProductDTO> GetById(Guid id)
+    public async Task<Product> GetById(Guid id)
     {
-        var filter = Builders<ProductDTO>.Filter.Eq(x => x.ProductId, id);
+        var filter = Builders<Product>.Filter.Eq(x => x.ProductId, id);
 
         return await _mongoConnection.GetConnection()
-            .GetCollection<ProductDTO>("Products")
+            .GetCollection<Product>("Products")
             .Find(filter).SingleOrDefaultAsync();
     }
 
-    public async Task Insert(ProductDTO product)
+    public async Task Insert(Product product)
     {
         await _mongoConnection.GetConnection()
-            .GetCollection<ProductDTO>("Products")
+            .GetCollection<Product>("Products")
             .InsertOneAsync(product);
     }
 
-    public async Task Update(ProductDTO product)
+    public async Task Update(Product product)
     {
-        var filter = Builders<ProductDTO>
+        var filter = Builders<Product>
             .Filter
             .Eq(x => x.ProductId, product.ProductId);
 
         await _mongoConnection.GetConnection()
-            .GetCollection<ProductDTO>("Products")
+            .GetCollection<Product>("Products")
             .ReplaceOneAsync(filter, product);
     }
 }

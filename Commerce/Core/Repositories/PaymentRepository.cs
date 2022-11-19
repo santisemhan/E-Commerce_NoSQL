@@ -1,4 +1,4 @@
-﻿using Commerce.Core.DataTransferObjects;
+﻿using Commerce.Core.Models;
 using Commerce.Core.Repositories.Contexts.Interfaces;
 using Commerce.Core.Repositories.Interfaces;
 using MongoDB.Bson;
@@ -15,27 +15,27 @@ public class PaymentRepository : IPaymentRepository
         _mongoConnection = mongoConnection;
     }
 
-    public async Task<List<PaymentDTO>> GetAll()
+    public async Task<List<Payment>> GetAll()
     {
         return (await _mongoConnection.GetConnection()
-            .GetCollection<PaymentDTO>("Payments")
+            .GetCollection<Payment>("Payments")
             .FindAsync(new BsonDocument()))
             .ToList();
     }
 
-    public async Task<PaymentDTO> GetById(Guid id)
+    public async Task<Payment> GetById(Guid id)
     {
-        var filter = Builders<PaymentDTO>.Filter.Eq(x => x.PaymentId, id);
+        var filter = Builders<Payment>.Filter.Eq(x => x.PaymentId, id);
 
         return await _mongoConnection.GetConnection()
-            .GetCollection<PaymentDTO>("Users")
+            .GetCollection<Payment>("Payments")
             .Find(filter).SingleAsync();
     }
 
-    public async Task Insert(PaymentDTO newPayment)
+    public async Task Insert(Payment newPayment)
     {
         await _mongoConnection.GetConnection()
-            .GetCollection<PaymentDTO>("Products")
+            .GetCollection<Payment>("Payments")
             .InsertOneAsync(newPayment);
     }
 }

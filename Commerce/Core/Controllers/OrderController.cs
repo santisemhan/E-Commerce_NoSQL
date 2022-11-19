@@ -1,4 +1,6 @@
 ﻿using Commerce.Core.DataTransferObjects;
+using Commerce.Core.DataTransferObjects.Request;
+using Commerce.Core.Models;
 using Commerce.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,8 +29,14 @@ public class OrderController : ControllerBase
         return Ok(await orderService.GetOrderById(id));
     }
 
+    [HttpGet("{status}")]
+    public async Task<IActionResult> GetOrderByStatus(bool status)
+    {
+        return Ok(await orderService.GetOrderByStatus(status));
+    }
+
     [HttpPost]
-    public async Task<IActionResult> CreateOrder([FromBody] OrderDTO order)
+    public async Task<IActionResult> CreateOrder([FromBody] OrderRequestDTO order)
     {
         if (order == null) { return BadRequest(); }
 
@@ -38,11 +46,11 @@ public class OrderController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateOrder([FromBody] OrderDTO order, Guid id)
+    public async Task<IActionResult> UpdateOrder([FromBody] Order order)
     {
         if (order == null) { return BadRequest(); }
 
-        await orderService.UpdateOrder(order, id);
+        await orderService.UpdateOrder(order);
 
         return NoContent();
     }

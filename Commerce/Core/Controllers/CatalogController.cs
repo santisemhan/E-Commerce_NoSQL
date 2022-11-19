@@ -1,4 +1,6 @@
 ﻿using Commerce.Core.DataTransferObjects;
+using Commerce.Core.DataTransferObjects.Request;
+using Commerce.Core.Models;
 using Commerce.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,7 +36,7 @@ public class CatalogController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateCatalog([FromBody] ProductCatalogDTO catalog)
+    public async Task<IActionResult> CreateCatalog([FromBody] ProductCatalogRequestDTO catalog)
     {
         if (catalog == null) { return BadRequest(); }
 
@@ -44,11 +46,11 @@ public class CatalogController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateCatalog([FromBody] ProductCatalogDTO catalog, Guid id)
+    public async Task<IActionResult> UpdateCatalog([FromBody] ProductCatalog catalog, Guid id)
     {
         if (catalog == null) { return BadRequest(); }
 
-        await catalogService.UpdateCatalog(catalog, id);
+        await catalogService.UpdateCatalog(catalog);
 
         return NoContent();
     }

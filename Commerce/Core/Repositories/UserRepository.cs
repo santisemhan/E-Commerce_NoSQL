@@ -1,4 +1,4 @@
-﻿using Commerce.Core.DataTransferObjects;
+﻿using Commerce.Core.Models;
 using Commerce.Core.Repositories.Contexts.Interfaces;
 using Commerce.Core.Repositories.Interfaces;
 using MongoDB.Bson;
@@ -17,46 +17,46 @@ public class UserRepository : IUserRepository
 
     public async Task Delete(Guid id)
     {
-        var filter = Builders<UserDTO>
+        var filter = Builders<User>
             .Filter
             .Eq(x => x.UserId, id);
 
         await _mongoConnection.GetConnection()
-            .GetCollection<UserDTO>("Users")
+            .GetCollection<User>("Users")
             .DeleteOneAsync(filter);
     }
 
-    public async Task<List<UserDTO>> GetAll()
+    public async Task<List<User>> GetAll()
     {
         return (await _mongoConnection.GetConnection()
-            .GetCollection<UserDTO>("Users")
+            .GetCollection<User>("Users")
             .FindAsync(new BsonDocument()))
             .ToList();
     }
 
-    public async Task<UserDTO> GetById(Guid id)
+    public async Task<User> GetById(Guid id)
     {
-        var filter = Builders<UserDTO>.Filter.Eq(x => x.UserId, id);
+        var filter = Builders<User>.Filter.Eq(x => x.UserId, id);
 
         return await _mongoConnection.GetConnection()
-            .GetCollection<UserDTO>("Users")
+            .GetCollection<User>("Users")
             .Find(filter).SingleAsync();
     }
 
-    public async Task Insert(UserDTO user)
+    public async Task Insert(User user)
     {
         await _mongoConnection.GetConnection()
-            .GetCollection<UserDTO>("Users").InsertOneAsync(user);
+            .GetCollection<User>("Users").InsertOneAsync(user);
     }
 
-    public async Task Update(UserDTO user)
+    public async Task Update(User user)
     {
-        var filter = Builders<UserDTO>
+        var filter = Builders<User>
             .Filter
             .Eq(x => x.UserId, user.UserId);
 
         await _mongoConnection.GetConnection()
-            .GetCollection<UserDTO>("Users")
+            .GetCollection<User>("Users")
             .ReplaceOneAsync(filter, user);
     }
 }

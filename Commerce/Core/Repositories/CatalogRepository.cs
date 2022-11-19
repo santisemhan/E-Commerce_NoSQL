@@ -1,4 +1,4 @@
-﻿using Commerce.Core.DataTransferObjects;
+﻿using Commerce.Core.Models;
 using Commerce.Core.Repositories.Contexts.Interfaces;
 using Commerce.Core.Repositories.Interfaces;
 using MongoDB.Bson;
@@ -20,56 +20,56 @@ public class CatalogRepository : ICatalogRepository
 
     public async Task Delete(Guid productCatalogId)
     {
-        var filter = Builders<ProductCatalogDTO>
+        var filter = Builders<ProductCatalog>
             .Filter
             .Eq(x => x.Id, productCatalogId);
 
         await _mongoConnection.GetConnection()
-            .GetCollection<ProductCatalogDTO>("ProductCatalogs")
+            .GetCollection<ProductCatalog>("ProductCatalogs")
             .DeleteManyAsync(filter);
     }
 
-    public async Task<List<ProductCatalogDTO>> GetAll()
+    public async Task<List<ProductCatalog>> GetAll()
     {
         return (await _mongoConnection.GetConnection()
-            .GetCollection<ProductCatalogDTO>("ProductCatalogs")
+            .GetCollection<ProductCatalog>("ProductCatalogs")
             .FindAsync(new BsonDocument()))
             .ToList();
     }
 
-    public async Task<ProductCatalogDTO> GetById(Guid id)
+    public async Task<ProductCatalog> GetById(Guid id)
     {
-        var filter = Builders<ProductCatalogDTO>.Filter.Eq(x => x.Id, id);
+        var filter = Builders<ProductCatalog>.Filter.Eq(x => x.Id, id);
 
         return await _mongoConnection.GetConnection()
-            .GetCollection<ProductCatalogDTO>("ProductCatalogs")
+            .GetCollection<ProductCatalog>("ProductCatalogs")
             .Find(filter).SingleAsync();
     }
 
-    public async Task<List<ProductCatalogDTO>> GetLogById(Guid id)
+    public async Task<List<ProductCatalog>> GetLogById(Guid id)
     {
-        var log = new List<ProductCatalogDTO>();
+        var log = new List<ProductCatalog>();
 
         var query = _cassandraConnection.GetConnection()
             .Execute($@"SELECT * FROM catalog WHERE productid = {id}");
 
         foreach (var row in query) 
         {
-            var catalog = new ProductCatalogDTO(row);
+            var catalog = new ProductCatalog(row);
             log.Add(catalog);
         }
 
         return log;
     }
 
-    public async Task Insert(ProductCatalogDTO catalog)
+    public async Task Insert(ProductCatalog catalog)
     {
         await _mongoConnection.GetConnection()
-            .GetCollection<ProductCatalogDTO>("ProductCatalogs")
+            .GetCollection<ProductCatalog>("ProductCatalogs")
             .InsertOneAsync(catalog);
     }
 
-    public async Task InsertLog(ProductCatalogDTO catalog)
+    public async Task InsertLog(ProductCatalog catalog)
     {
         var productCatalogId = Guid.NewGuid();
 
@@ -81,14 +81,16 @@ public class CatalogRepository : ICatalogRepository
             .Execute(query.Bind(productCatalogId,catalog.ProductId,catalog.Price));
     }
 
-    public async Task Update(ProductCatalogDTO catalog)
+
+
+    public async Task Update(ProductCatalog catalog)
     {
-        var filter = Builders<ProductCatalogDTO>
+        var filter = Builders<ProductCatalog>
             .Filter
             .Eq(x => x.Id, catalog.Id);
 
         await _mongoConnection.GetConnection()
-            .GetCollection<ProductCatalogDTO>("ProductCatalogs")
+            .GetCollection<ProductCatalog>("ProductCatalogs")
             .ReplaceOneAsync(filter,catalog);
     }
 }
