@@ -1,16 +1,17 @@
-﻿using Commerce.Core.DataTransferObjects;
+﻿using Commerce.Core.Models;
 
 namespace Commerce.Core.Repositories.Interfaces;
 
 public interface IOrderRepository
 {
-    Task<List<OrderDTO>> GetAll();
+    Task<List<Order>> GetAll();
 
-    Task<OrderDTO> GetById(Guid id);
+    Task<Order> GetById(Guid id);
 
-    Task Insert(OrderDTO order);
+    Task Insert(Order order);
 
-    Task Update(OrderDTO order);
+    Task Update(Order order);
 
     Task Delete(Guid order);
+    Task<List<Order>> GetAllByStatus(bool status);
 }

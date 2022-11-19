@@ -1,13 +1,13 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Commerce.Core.DataTransferObjects
+namespace Commerce.Core.Models
 {
-    public class ProductDTO
+    public class Product
     {
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
-        public Guid ProductId { get; set; }
+        public Guid ProductId { get; set; } = Guid.NewGuid();
 
         public string ProductName { get; set; }
       

@@ -1,12 +1,14 @@
 ﻿using Commerce.Core.DataTransferObjects;
+using Commerce.Core.DataTransferObjects.Request;
+using Commerce.Core.Models;
 
 namespace Commerce.Core.Services.Interfaces;
 
 public interface IProductService
 {
-    Task<List<ProductDTO>> GetAllProducts();
-    Task<ProductDTO> GetProductById(Guid id);
-    Task InsertProduct(ProductDTO product);
-    Task UpdateProduct(ProductDTO product, Guid id);
+    Task<List<Product>> GetAllProducts();
+    Task<Product> GetProductById(Guid id);
+    Task InsertProduct(ProductRequestDTO productDTO);
+    Task UpdateProduct(Product product);
     Task DeleteProduct(Guid id);
 }

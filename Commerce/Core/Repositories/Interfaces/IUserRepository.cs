@@ -1,16 +1,16 @@
-﻿using Commerce.Core.DataTransferObjects;
+﻿using Commerce.Core.Models;
 
 namespace Commerce.Core.Repositories.Interfaces;
 
 public interface IUserRepository
 {
-    Task<List<UserDTO>> GetAll();
+    Task<List<User>> GetAll();
 
-    Task<UserDTO> GetById(Guid id);
+    Task<User> GetById(Guid id);
 
-    Task Insert(UserDTO user);
+    Task Insert(User user);
 
-    Task Update(UserDTO user);
+    Task Update(User user);
 
     Task Delete(Guid id);
 }

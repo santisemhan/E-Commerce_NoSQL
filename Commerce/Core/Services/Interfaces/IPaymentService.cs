@@ -1,11 +1,12 @@
-﻿using Commerce.Core.DataTransferObjects;
+﻿
+using Commerce.Core.Models;
 
 namespace Commerce.Core.Services.Interfaces
 {
     public interface IPaymentService
     {
-        Task<List<PaymentDTO>> GetAllPayments();
-        Task<PaymentDTO> GetPaymentById(Guid id);
+        Task<List<Payment>> GetAllPayments();
+        Task<Payment> GetPaymentById(Guid id);
         Task InsertPayment(Guid orderId, Guid userId, string paymentType);
     }
 }

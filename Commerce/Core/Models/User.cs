@@ -1,13 +1,13 @@
-﻿namespace Commerce.Core.DataTransferObjects
+﻿namespace Commerce.Core.Models
 {
     using MongoDB.Bson;
     using MongoDB.Bson.Serialization.Attributes;
 
-    public class UserDTO
+    public class User
     {
         [BsonId]
         [BsonRepresentation(BsonType.String)]
-        public Guid UserId { get; set; }
+        public Guid UserId { get; set; } = Guid.NewGuid();
 
         public string Name { get; set; }
 

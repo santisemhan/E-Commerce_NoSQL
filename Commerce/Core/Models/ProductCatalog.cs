@@ -2,20 +2,20 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Commerce.Core.DataTransferObjects
+namespace Commerce.Core.Models
 {
-    public class ProductCatalogDTO
+    public class ProductCatalog
     {
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         public Guid ProductId { get; set; }
 
         public decimal Price { get; set; }
-        public ProductCatalogDTO() { }
+        public ProductCatalog() { }
 
-        public ProductCatalogDTO(Row row)
+        public ProductCatalog(Row row)
         {
             Id = row.GetValue<Guid>(nameof(Id).ToLower());
             ProductId = row.GetValue<Guid>(nameof(ProductId).ToLower());

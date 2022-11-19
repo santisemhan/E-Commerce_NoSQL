@@ -1,20 +1,20 @@
-﻿using Commerce.Core.DataTransferObjects;
+﻿using Commerce.Core.Models;
 
 namespace Commerce.Core.Repositories.Interfaces;
 
 public interface ICatalogRepository
 {
-    Task<List<ProductCatalogDTO>> GetAll();
+    Task<List<ProductCatalog>> GetAll();
 
-    Task<ProductCatalogDTO> GetById(Guid id);
+    Task<ProductCatalog> GetById(Guid id);
 
-    Task<List<ProductCatalogDTO>> GetLogById(Guid id);
+    Task<List<ProductCatalog>> GetLogById(Guid id);
 
-    Task Insert(ProductCatalogDTO catalog);
+    Task Insert(ProductCatalog catalog);
 
-    Task InsertLog(ProductCatalogDTO catalog);
+    Task InsertLog(ProductCatalog catalog);
 
-    Task Update(ProductCatalogDTO catalog);
+    Task Update(ProductCatalog catalog);
 
     Task Delete(Guid productCatalogId);
 }

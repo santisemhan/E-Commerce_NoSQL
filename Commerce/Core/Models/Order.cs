@@ -1,8 +1,8 @@
-﻿namespace Commerce.Core.DataTransferObjects
+﻿namespace Commerce.Core.Models
 {
     using MongoDB.Bson.Serialization.Attributes;
 
-    public class OrderDTO
+    public class Order
     {
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
@@ -10,11 +10,13 @@
 
         public DateTime TimeStamp { get; set; }
 
-        public UserDTO User { get; set; }
+        public User User { get; set; }
 
-        public List<ProductCartDTO> Products { get; set; }
+        public List<ProductCart> Products { get; set; }
 
         public bool IVA { get; set; }
+
+        public bool OrderStatus { get; set; } = false;
 
         public decimal FinalPrice { get; set; }
     }

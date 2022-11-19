@@ -1,12 +1,12 @@
-﻿using Commerce.Core.DataTransferObjects;
+﻿using Commerce.Core.Models;
 
 namespace Commerce.Core.Repositories.Interfaces;
 
 public interface IPaymentRepository
 {
-    Task<List<PaymentDTO>> GetAll();
+    Task<List<Payment>> GetAll();
 
-    Task<PaymentDTO> GetById(Guid id);
+    Task<Payment> GetById(Guid id);
 
-    Task Insert(PaymentDTO newPayment);
+    Task Insert(Payment newPayment);
 }
