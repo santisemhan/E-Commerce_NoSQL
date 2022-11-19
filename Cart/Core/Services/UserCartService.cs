@@ -29,5 +29,10 @@
         {
             await _userCartRepository.RestoreCart(userId, logId);
         }
+
+        public Task Checkout(UserCartDTO checkoutInfo)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

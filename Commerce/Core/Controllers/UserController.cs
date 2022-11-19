@@ -1,6 +1,5 @@
 ﻿using Commerce.Core.DataTransferObjects;
 using Commerce.Core.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Commerce.Core.Controllers;
@@ -17,7 +16,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllUsers() //ActionResult<List<UserDTO>>
+    public async Task<IActionResult> GetAllUsers()
     {
         return Ok(await userService.GetAllUsers());
     }

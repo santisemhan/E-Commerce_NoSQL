@@ -18,11 +18,11 @@ public class CatalogRepository : ICatalogRepository
         _cassandraConnection = cassandraConnection;
     }
 
-    public async Task Delete(Guid catalog)
+    public async Task Delete(Guid productCatalogId)
     {
         var filter = Builders<ProductCatalogDTO>
             .Filter
-            .Eq(x => x.Id, catalog);
+            .Eq(x => x.Id, productCatalogId);
 
         await _mongoConnection.GetConnection()
             .GetCollection<ProductCatalogDTO>("ProductCatalogs")
@@ -48,13 +48,13 @@ public class CatalogRepository : ICatalogRepository
 
     public async Task<List<ProductCatalogDTO>> GetLogById(Guid id)
     {
-
         var log = new List<ProductCatalogDTO>();
 
         var query = _cassandraConnection.GetConnection()
             .Execute($@"SELECT * FROM catalog WHERE productid = {id}");
 
-        foreach (var row in query) {
+        foreach (var row in query) 
+        {
             var catalog = new ProductCatalogDTO(row);
             log.Add(catalog);
         }

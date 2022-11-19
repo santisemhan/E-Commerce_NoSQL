@@ -35,9 +35,8 @@ public class PaymentService : IPaymentService
     }
     public async Task InsertPayment(Guid orderId, Guid userId,string paymentType)
     {
-        await orderService.GetOrderById(orderId); //existe la orden?
-
-        
+        await orderService.GetOrderById(orderId); 
+      
         var user = await userService.GetUserById(userId);
 
         PaymentDTO newPayment = new()

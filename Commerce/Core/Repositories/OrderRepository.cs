@@ -45,14 +45,11 @@ public class OrderRepository : IOrderRepository
            .Find(filter).SingleAsync();
     }
 
-
     public async Task Insert(OrderDTO order)
     {
         await _mongoConnection.GetConnection()
             .GetCollection<OrderDTO>("Orders")
             .InsertOneAsync(order);
-
-  
     }
 
     public async Task Update(OrderDTO order)

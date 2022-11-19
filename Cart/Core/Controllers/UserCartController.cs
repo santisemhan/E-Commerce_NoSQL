@@ -40,6 +40,7 @@
         [Route("checkout")]
         public async Task<IActionResult> Checkout([FromBody] UserCartDTO checkoutInfo)
         {
+            await _userCartService.Checkout(checkoutInfo);
             return NoContent();
         }
     }

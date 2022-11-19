@@ -6,8 +6,6 @@
 
     public class CassandraDataContext : Mappings, IConnection<ISession>
     {
-        // SEE: https://www.youtube.com/watch?v=GlDERX0B5HY&ab_channel=DevNinja
-
         private ISession _session;
 
         public CassandraDataContext(IConfiguration configuration)

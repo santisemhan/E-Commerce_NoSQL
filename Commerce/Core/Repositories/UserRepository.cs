@@ -30,7 +30,7 @@ public class UserRepository : IUserRepository
     {
         return (await _mongoConnection.GetConnection()
             .GetCollection<UserDTO>("Users")
-            .FindAsync(new BsonDocument())) //se envia un elemento vacio
+            .FindAsync(new BsonDocument()))
             .ToList();
     }
 
@@ -56,6 +56,7 @@ public class UserRepository : IUserRepository
             .Eq(x => x.UserId, user.UserId);
 
         await _mongoConnection.GetConnection()
-            .GetCollection<UserDTO>("Users").ReplaceOneAsync(filter, user);
+            .GetCollection<UserDTO>("Users")
+            .ReplaceOneAsync(filter, user);
     }
 }
