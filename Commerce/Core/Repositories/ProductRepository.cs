@@ -39,8 +39,8 @@ public class ProductRepository : IProductRepository
         var filter = Builders<ProductDTO>.Filter.Eq(x => x.ProductId, id);
 
         return await _mongoConnection.GetConnection()
-            .GetCollection<ProductDTO>("Users")
-            .Find(filter).SingleAsync();
+            .GetCollection<ProductDTO>("Products")
+            .Find(filter).SingleOrDefaultAsync();
     }
 
     public async Task Insert(ProductDTO product)

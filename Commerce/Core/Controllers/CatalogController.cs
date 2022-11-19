@@ -27,7 +27,7 @@ public class CatalogController : ControllerBase
         return Ok(await catalogService.GetCatalogById(id));
     }
 
-    [HttpGet("/log/{id}")]
+    [HttpGet("log/{id}")]
     public async Task<IActionResult> GetCatalogLogById(Guid id)
     {
         return Ok(await catalogService.GetCatalogLogById(id));

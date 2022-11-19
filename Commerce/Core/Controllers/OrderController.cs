@@ -53,4 +53,10 @@ public class OrderController : ControllerBase
         await orderService.DeleteOrder(id);
         return NoContent();
     }
+
+    [HttpGet("factura/{id}")]
+    public async Task<IActionResult> GetFacturarById(Guid id)
+    {
+        return Ok(await orderService.GetOrderById(id));
+    }
 }

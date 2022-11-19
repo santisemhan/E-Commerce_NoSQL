@@ -8,15 +8,16 @@ namespace Commerce.Core.DataTransferObjects
     {
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
-        public Guid ProductCatalogId { get; set; }
+        public Guid Id { get; set; }
 
         public Guid ProductId { get; set; }
 
         public decimal Price { get; set; }
+        public ProductCatalogDTO() { }
 
         public ProductCatalogDTO(Row row)
         {
-            ProductCatalogId = row.GetValue<Guid>(nameof(ProductCatalogId).ToLower());
+            Id = row.GetValue<Guid>(nameof(Id).ToLower());
             ProductId = row.GetValue<Guid>(nameof(ProductId).ToLower());
             Price = row.GetValue<decimal>(nameof(Price).ToLower());
         }

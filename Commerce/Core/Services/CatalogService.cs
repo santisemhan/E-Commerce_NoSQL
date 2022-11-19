@@ -36,9 +36,9 @@ public class CatalogService : ICatalogService
         return catalog;
     }
 
-    public Task<List<ProductCatalogDTO>> GetCatalogLogById(Guid id)
+    public async Task<List<ProductCatalogDTO>> GetCatalogLogById(Guid id)
     {
-        throw new NotImplementedException();
+        return  await catalogRepository.GetLogById(id);
     }
 
     public async Task InsertCatalog(ProductCatalogDTO catalog)
@@ -49,8 +49,12 @@ public class CatalogService : ICatalogService
 
     public async Task UpdateCatalog(ProductCatalogDTO catalog, Guid id)
     {
-        await GetCatalogById(id);
-        catalog.ProductCatalogId = id;
+        var catalogo = await catalogRepository.GetById(id);
+        if (catalogo is null)
+        {
+            throw new AppException("El catalogo no existe", HttpStatusCode.NotFound);
+        }
+        catalog.Id = id;
         await catalogRepository.Update(catalog);
         await catalogRepository.InsertLog(catalog);
     }

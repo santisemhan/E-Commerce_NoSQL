@@ -10,8 +10,6 @@
 
         private ISession _session;
 
-        private string KeySpaceName;
-
         public CassandraDataContext(IConfiguration configuration)
         {
             _session = Cluster.Builder()

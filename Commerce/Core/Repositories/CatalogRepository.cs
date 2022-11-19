@@ -22,7 +22,7 @@ public class CatalogRepository : ICatalogRepository
     {
         var filter = Builders<ProductCatalogDTO>
             .Filter
-            .Eq(x => x.ProductId, catalog);
+            .Eq(x => x.Id, catalog);
 
         await _mongoConnection.GetConnection()
             .GetCollection<ProductCatalogDTO>("ProductCatalogs")
@@ -39,10 +39,10 @@ public class CatalogRepository : ICatalogRepository
 
     public async Task<ProductCatalogDTO> GetById(Guid id)
     {
-        var filter = Builders<ProductCatalogDTO>.Filter.Eq(x => x.ProductCatalogId, id);
+        var filter = Builders<ProductCatalogDTO>.Filter.Eq(x => x.Id, id);
 
         return await _mongoConnection.GetConnection()
-            .GetCollection<ProductCatalogDTO>("Users")
+            .GetCollection<ProductCatalogDTO>("ProductCatalogs")
             .Find(filter).SingleAsync();
     }
 
@@ -52,7 +52,7 @@ public class CatalogRepository : ICatalogRepository
         var log = new List<ProductCatalogDTO>();
 
         var query = _cassandraConnection.GetConnection()
-            .Execute($@"SELECT * FROM catalog WHERE id = {id}");
+            .Execute($@"SELECT * FROM catalog WHERE productid = {id}");
 
         foreach (var row in query) {
             var catalog = new ProductCatalogDTO(row);
@@ -85,10 +85,10 @@ public class CatalogRepository : ICatalogRepository
     {
         var filter = Builders<ProductCatalogDTO>
             .Filter
-            .Eq(x => x.ProductCatalogId, catalog.ProductCatalogId);
+            .Eq(x => x.Id, catalog.Id);
 
         await _mongoConnection.GetConnection()
-            .GetCollection<ProductCatalogDTO>("ProductCatalog")
-            .ReplaceOneAsync(filter, catalog);
+            .GetCollection<ProductCatalogDTO>("ProductCatalogs")
+            .ReplaceOneAsync(filter,catalog);
     }
 }

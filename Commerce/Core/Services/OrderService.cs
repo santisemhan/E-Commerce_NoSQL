@@ -9,9 +9,11 @@ namespace Commerce.Core.Services;
 public class OrderService : IOrderService
 {
     private readonly IOrderRepository orderRepository;
-    public OrderService(IOrderRepository orderRepository)
+    private readonly IProductRepository productrRepository;
+    public OrderService(IOrderRepository orderRepository, IProductRepository productrRepository)
     {
         this.orderRepository = orderRepository;
+        this.productrRepository = productrRepository;
     }
     public async Task DeleteOrder(Guid id)
     {
@@ -35,13 +37,58 @@ public class OrderService : IOrderService
 
     public async Task InsertOrder(OrderDTO order)
     {
+        foreach(ProductCartDTO product in order.Products)
+        {
+            var producto = await productrRepository.GetById(product.ProductCatalog.ProductId);
+            if (producto is null)
+            {
+                throw new AppException("Hay productos que no existen", HttpStatusCode.NotFound);
+            }
+            if (producto.Stock < product.Quantity)
+            {
+                throw new AppException("No hay stock suficiente", HttpStatusCode.NotFound);
+            }
+        }
+        foreach (ProductCartDTO product in order.Products)
+        {
+            var producto = await productrRepository.GetById(product.ProductCatalog.ProductId);
+            producto.Stock = producto.Stock - product.Quantity;
+            await productrRepository.Update(producto);
+        }
         await orderRepository.Insert(order);
     }
 
     public async Task UpdateOrder(OrderDTO order, Guid id)
     {
-        await GetOrderById(id);
+        foreach (ProductCartDTO product in order.Products)
+        {
+            var producto = await productrRepository.GetById(product.ProductCatalog.ProductId);
+            if (producto is null)
+            {
+                throw new AppException("Hay productos que no existen", HttpStatusCode.NotFound);
+            }
+            if (producto.Stock < product.Quantity)
+            {
+                throw new AppException("No hay stock suficiente", HttpStatusCode.NotFound);
+            }
+        }
+        var originalOrder = await GetOrderById(id);
         order.OrderId = id;
+        foreach (ProductCartDTO product in order.Products)
+        {
+            var originalProduct = new ProductCartDTO();
+            foreach (ProductCartDTO p in originalOrder.Products)
+            {
+                if (p.ProductCatalog.ProductId == product.ProductCatalog.ProductId)
+                {
+                    originalProduct = p;
+                }
+            }
+
+            var producto = await productrRepository.GetById(product.ProductCatalog.ProductId);
+            producto.Stock = producto.Stock - (product.Quantity - originalProduct.Quantity);
+            await productrRepository.Update(producto);
+        }
         await orderRepository.Update(order);
     }
 }
