@@ -1,5 +1,8 @@
-﻿using Commerce.Core.DataTransferObjects;
+﻿using AutoMapper;
+using Commerce.Core.DataTransferObjects;
+using Commerce.Core.DataTransferObjects.Request;
 using Commerce.Core.Exceptions;
+using Commerce.Core.Models;
 using Commerce.Core.Repositories.Interfaces;
 using Commerce.Core.Services.Interfaces;
 using System.Net;
@@ -9,10 +12,12 @@ namespace Commerce.Core.Services;
 public class UserService : IUserService
 {
     private readonly IUserRepository userRepository;
+    private readonly IMapper mapper;
 
     public UserService(IUserRepository userRepository)
     {
         this.userRepository = userRepository;
+        this.mapper = mapper;
     }
 
     public async Task DeleteUser(Guid id)
@@ -21,12 +26,13 @@ public class UserService : IUserService
         await userRepository.Delete(id);
     }
 
-    public async Task<List<UserDTO>> GetAllUsers()
+    public async Task<List<User>> GetAllUsers()
     {
+
         return await userRepository.GetAll();
     }
 
-    public async Task<UserDTO> GetUserById(Guid id)
+    public async Task<User> GetUserById(Guid id)
     {
         var user = await userRepository.GetById(id);
         if (user is null)
@@ -36,15 +42,21 @@ public class UserService : IUserService
         return user;
     }
 
-    public async Task InsertUser(UserDTO user)
+    public async Task InsertUser(UserDTO userDTO)
     {
+        User user = new()
+        {
+            LastName = userDTO.LastName,
+            Adress = userDTO.Adress,
+            Name = userDTO.Name
+        };
+
         await userRepository.Insert(user);
     }
 
-    public async Task UpdateUser(UserDTO user, Guid id)
+    public async Task UpdateUser(User user)
     {
-        await GetUserById(id);
-        user.UserId = id;
+        await GetUserById(user.UserId);
         await userRepository.Update(user);
     }
 }

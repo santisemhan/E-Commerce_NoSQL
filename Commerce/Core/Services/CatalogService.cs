@@ -1,5 +1,7 @@
 ﻿using Commerce.Core.DataTransferObjects;
+using Commerce.Core.DataTransferObjects.Request;
 using Commerce.Core.Exceptions;
+using Commerce.Core.Models;
 using Commerce.Core.Repositories.Interfaces;
 using Commerce.Core.Services.Interfaces;
 using System.Net;
@@ -21,12 +23,12 @@ public class CatalogService : ICatalogService
         await catalogRepository.Delete(id);
     }
 
-    public async Task<List<ProductCatalogDTO>> GetAllCatalogs()
+    public async Task<List<ProductCatalog>> GetAllCatalogs()
     {
         return await catalogRepository.GetAll();
     }
 
-    public async Task<ProductCatalogDTO> GetCatalogById(Guid id)
+    public async Task<ProductCatalog> GetCatalogById(Guid id)
     {
         var catalog =  await catalogRepository.GetById(id);
         if (catalog is null)
@@ -36,25 +38,29 @@ public class CatalogService : ICatalogService
         return catalog;
     }
 
-    public async Task<List<ProductCatalogDTO>> GetCatalogLogById(Guid id)
+    public async Task<List<ProductCatalog>> GetCatalogLogById(Guid id)
     {
         return  await catalogRepository.GetLogById(id);
     }
 
-    public async Task InsertCatalog(ProductCatalogDTO catalog)
+    public async Task InsertCatalog(ProductCatalogDTO catalogDTO)
     {
+        ProductCatalog catalog = new()
+        {
+            ProductId = catalogDTO.ProductId,
+            Price = catalogDTO.Price
+        };
         await catalogRepository.Insert(catalog);
         await catalogRepository.InsertLog(catalog);
     }
 
-    public async Task UpdateCatalog(ProductCatalogDTO catalog, Guid id)
+    public async Task UpdateCatalog(ProductCatalog catalog)
     {
-        var catalogo = await catalogRepository.GetById(id);
+        var catalogo = await catalogRepository.GetById(catalog.Id);
         if (catalogo is null)
         {
             throw new AppException("El catalogo no existe", HttpStatusCode.NotFound);
         }
-        catalog.Id = id;
         await catalogRepository.Update(catalog);
         await catalogRepository.InsertLog(catalog);
     }

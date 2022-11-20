@@ -1,4 +1,6 @@
 ﻿using Commerce.Core.DataTransferObjects;
+using Commerce.Core.DataTransferObjects.Request;
+using Commerce.Core.Models;
 using Commerce.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,11 +40,11 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateProduct([FromBody] ProductDTO product, Guid id)
+    public async Task<IActionResult> UpdateProduct([FromBody] Product product)
     {
         if (product == null) { return BadRequest(); }
 
-        await productService.UpdateProduct(product, id);
+        await productService.UpdateProduct(product);
 
         return NoContent();
     }

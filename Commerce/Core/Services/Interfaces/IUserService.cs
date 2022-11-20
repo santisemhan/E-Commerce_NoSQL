@@ -8,7 +8,7 @@ public interface IUserService
 {
     Task<List<User>> GetAllUsers();
     Task<User> GetUserById(Guid id);
-    Task InsertUser(UserRequestDTO user);
+    Task InsertUser(UserDTO user);
     Task UpdateUser(User user);
     Task DeleteUser(Guid id);
 }

@@ -1,6 +1,6 @@
 ﻿namespace Commerce.Core.DataTransferObjects.Request
 {
-    public class ProductRequestDTO
+    public class ProductDTO
     {
         public string ProductName { get; set; }
 

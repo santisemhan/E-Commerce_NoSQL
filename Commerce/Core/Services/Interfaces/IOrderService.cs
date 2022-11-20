@@ -8,8 +8,8 @@ public interface IOrderService
 {
     Task<List<Order>> GetAllOrders();
     Task<Order> GetOrderById(Guid id);
-    Task InsertOrder(OrderRequestDTO order);
-    Task UpdateOrder(Order order);
+    Task InsertOrder(OrderDTO order);
     Task DeleteOrder(Guid id);
     Task<List<Order>> GetOrderByStatus(bool status);
+    Task ChangeStatus(Order order);
 }
