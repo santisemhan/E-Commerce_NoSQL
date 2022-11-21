@@ -47,7 +47,9 @@ public class CatalogService : ICatalogService
     {
         ProductCatalog catalog = new()
         {
+            AuthorId = catalogDTO.AuthorId, 
             ProductId = catalogDTO.ProductId,
+            Moment = DateTime.Now,
             Price = catalogDTO.Price
         };
         await catalogRepository.Insert(catalog);

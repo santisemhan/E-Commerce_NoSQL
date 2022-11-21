@@ -71,14 +71,12 @@ public class CatalogRepository : ICatalogRepository
 
     public async Task InsertLog(ProductCatalog catalog)
     {
-        var productCatalogId = Guid.NewGuid();
-
         var query = await _cassandraConnection.GetConnection()
-                    .PrepareAsync(@"INSERT INTO catalog (id, productid, price) 
-                                    VALUES (?,?,?)");
+                    .PrepareAsync(@"INSERT INTO catalog (id, moment, authorId,productid, price) 
+                                    VALUES (?,?,?,?,? )");
 
         _cassandraConnection.GetConnection()
-            .Execute(query.Bind(productCatalogId,catalog.ProductId,catalog.Price));
+            .Execute(query.Bind(Guid.NewGuid(),DateTime.Now, catalog.AuthorId,catalog.ProductId,catalog.Price));
     }
 
     public async Task Update(ProductCatalog catalog)
