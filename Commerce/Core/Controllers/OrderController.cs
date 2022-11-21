@@ -24,19 +24,19 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetOrderById(Guid id)
+    public async Task<IActionResult> GetOrderById([FromRoute] Guid id)
     {
         return Ok(await orderService.GetOrderById(id));
     }
 
-    [HttpGet("/status")]
-    public async Task<IActionResult> GetOrderByStatus(bool status)
+    [HttpGet("status")]
+    public async Task<IActionResult> GetOrderByStatus([FromQuery] bool status)
     {
         return Ok(await orderService.GetOrderByStatus(status));
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateOrder([FromBody] OrderRequestDTO order)
+    public async Task<IActionResult> CreateOrder([FromBody] OrderDTO order)
     {
         if (order == null) { return BadRequest(); }
 
@@ -45,25 +45,15 @@ public class OrderController : ControllerBase
         return Created("Created", true);
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateOrder([FromBody] OrderDTO order, Guid id)
-    {
-        if (order == null) { return BadRequest(); }
-
-        await orderService.UpdateOrder(order, id);
-
-        return NoContent();
-    }
-
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteOrder(Guid id)
+    public async Task<IActionResult> DeleteOrder([FromRoute] Guid id)
     {
         await orderService.DeleteOrder(id);
         return NoContent();
     }
 
     [HttpGet("factura/{id}")]
-    public async Task<IActionResult> GetFacturarById(Guid id)
+    public async Task<IActionResult> GetFacturarById([FromRoute] Guid id)
     {
         return Ok(await orderService.GetOrderById(id));
     }

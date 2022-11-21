@@ -24,13 +24,13 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetUserById(Guid id)
+    public async Task<IActionResult> GetUserById([FromRoute] Guid id)
     {
         return Ok(await userService.GetUserById(id));
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateUser([FromBody] UserRequestDTO user)
+    public async Task<IActionResult> CreateUser([FromBody] UserDTO user)
     {
         if (user == null) { return BadRequest(); }
 
@@ -50,7 +50,7 @@ public class UserController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUser(Guid id)
+    public async Task<IActionResult> DeleteUser([FromRoute] Guid id)
     {
         await userService.DeleteUser(id);
         return NoContent();

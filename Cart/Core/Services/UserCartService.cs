@@ -55,7 +55,8 @@
                  {
                      ProductId = p.ProductCatalogId,
                      Quantity = p.Quantity
-                 })
+                 }),
+                 IVA = true
             }), Encoding.UTF8, MediaTypeNames.Application.Json);
 
             var request = await client.PostAsync("order", content);

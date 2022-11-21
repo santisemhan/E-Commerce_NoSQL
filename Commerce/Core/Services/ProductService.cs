@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Commerce.Core.DataTransferObjects;
+﻿using Commerce.Core.DataTransferObjects;
 using Commerce.Core.DataTransferObjects.Request;
 using Commerce.Core.Exceptions;
 using Commerce.Core.Models;
@@ -12,12 +11,9 @@ namespace Commerce.Core.Services;
 public class ProductService : IProductService
 {
     private readonly IProductRepository productRepository;
-    private readonly IMapper mapper;
     public ProductService(IProductRepository productRepository)
     {
         this.productRepository = productRepository;
-        this.mapper = mapper;
-
     }
 
     public async Task DeleteProduct(Guid id)

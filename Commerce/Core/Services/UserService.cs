@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Commerce.Core.DataTransferObjects;
-using Commerce.Core.DataTransferObjects.Request;
+﻿using Commerce.Core.DataTransferObjects.Request;
 using Commerce.Core.Exceptions;
 using Commerce.Core.Models;
 using Commerce.Core.Repositories.Interfaces;
@@ -12,12 +10,10 @@ namespace Commerce.Core.Services;
 public class UserService : IUserService
 {
     private readonly IUserRepository userRepository;
-    private readonly IMapper mapper;
 
     public UserService(IUserRepository userRepository)
     {
         this.userRepository = userRepository;
-        this.mapper = mapper;
     }
 
     public async Task DeleteUser(Guid id)

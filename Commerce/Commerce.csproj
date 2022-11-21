@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Core\DataTransferObjects\Response\**" />
+    <Content Remove="Core\DataTransferObjects\Response\**" />
+    <EmbeddedResource Remove="Core\DataTransferObjects\Response\**" />
+    <None Remove="Core\DataTransferObjects\Response\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CassandraCSharpDriver" Version="3.18.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.18.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -15,10 +22,6 @@
 
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Core\DataTransferObjects\Response\" />
   </ItemGroup>
 
 </Project>

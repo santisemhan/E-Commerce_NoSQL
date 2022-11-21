@@ -53,29 +53,31 @@ public class OrderService : IOrderService
 
     public async Task InsertOrder(OrderDTO order)
     {
-        User user = await userService.GetUserById(order.idUser);
+        var user = await userService.GetUserById(order.UserId);
         var FinalPriceAux = 0;
-        List<ProductCart> ProductsCart = new List<ProductCart>();
-        foreach (ProductCartDTO product in order.Products)
+        var productsCart = new List<ProductCart>();
+
+        foreach (var product in order.Products)
         {
-            ProductCatalog productoCatalog = await catalogService.GetCatalogById(product.ProductCatalogId);
-            Product producto = await productrRepository.GetById(productoCatalog.ProductId);
+            var productoCatalog = await catalogService.GetCatalogById(product.ProductCatalogId);
+            var producto = await productrRepository.GetById(productoCatalog.ProductId);
             if (producto.Stock < product.Quantity)
             {
                 throw new AppException("No hay stock suficiente", HttpStatusCode.NotFound);
             }
         }
-        foreach (ProductCartDTO product in order.Products)
+
+        foreach (var product in order.Products)
         {
-            ProductCatalog productoCatalog = await catalogService.GetCatalogById(product.ProductCatalogId);
-            Product producto = await productrRepository.GetById(productoCatalog.ProductId);
+            var productoCatalog = await catalogService.GetCatalogById(product.ProductCatalogId);
+            var producto = await productrRepository.GetById(productoCatalog.ProductId);
             producto.Stock -= product.Quantity;
             await productrRepository.Update(producto);
 
             // agregamos los productos
-            ProductsCart.Add(new ProductCart () { ProductCatalog = productoCatalog,Quantity = product.Quantity });
+            productsCart.Add(new ProductCart () { ProductCatalog = productoCatalog,Quantity = product.Quantity });
 
-            //calculamos el precio
+            // calculamos el precio
             FinalPriceAux += (int)(productoCatalog.Price * product.Quantity);
         }
 
@@ -83,15 +85,11 @@ public class OrderService : IOrderService
         {
             TimeStamp = DateTime.Now,
             User = user,
-            Products = ProductsCart,
+            Products = productsCart,
             IVA = order.IVA,
             FinalPrice = FinalPriceAux
         };
 
         await orderRepository.Insert(neworder);
     }
-     
-     */
-
-
 }
