@@ -21,6 +21,7 @@ public class OrderService : IOrderService
         this.userService = userService;
         this.catalogService = catalogService;
     }
+
     public async Task DeleteOrder(Guid id)
     {
         await orderRepository.Delete(id);

@@ -23,8 +23,7 @@ namespace Commerce.Core.Controllers
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPaymentById([FromRoute] Guid id)
-        {
-            
+        {           
             return Ok(await paymentService.GetPaymentById(id));
         }
 

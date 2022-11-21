@@ -2,7 +2,6 @@
 
 namespace Commerce.Core.Models;
 
-
 public class Payment
 {
     [BsonId]

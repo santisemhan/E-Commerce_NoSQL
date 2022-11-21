@@ -1,18 +1,19 @@
-﻿using Cassandra;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace Commerce.Core.Models
+﻿namespace Commerce.Core.Models
 {
+    using Cassandra;
+    using MongoDB.Bson;
+    using MongoDB.Bson.Serialization.Attributes;
+
     public class ProductCatalog
     {
         [BsonId]
-        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
+        [BsonRepresentation(BsonType.String)]
         public Guid Id { get; set; } = Guid.NewGuid();
 
         public Guid ProductId { get; set; }
 
         public decimal Price { get; set; }
+
         public ProductCatalog() { }
 
         public ProductCatalog(Row row)

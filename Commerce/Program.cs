@@ -60,7 +60,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c => {
         c.RoutePrefix = "api/docs";
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cart Service BD II");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Commerce Service BD II");
     });
 }
 

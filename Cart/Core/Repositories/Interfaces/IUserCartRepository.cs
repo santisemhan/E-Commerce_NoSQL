@@ -11,5 +11,7 @@
         Task<UserCartDTO?> GetUserCartAsync(Guid userId);
 
         Task RestoreCart(Guid userId, Guid logId);
+
+        Task EmptyCart(Guid userId);
     }
 }

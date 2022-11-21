@@ -39,7 +39,7 @@ public class UserController : ControllerBase
         return Created("Created", true);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut]
     public async Task<IActionResult> UpdateUser([FromBody] User user)
     {
         if (user == null) { return BadRequest(); }

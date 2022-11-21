@@ -139,5 +139,20 @@
                     .SetRemoveAsync($"userCart:{userId}", product);
             }
         }
+
+        public async Task EmptyCart(Guid userId)
+        {
+            var userProductsId = await _redisConnection.GetConnection()
+                .SetMembersAsync($"userCart:{userId}");
+
+            if (userProductsId == null)
+                throw new Exception("Cart is empty");
+            
+            foreach (var product in userProductsId)
+            {
+                await _redisConnection.GetConnection()
+                    .SetRemoveAsync($"userCart:{userId}", product);
+            }
+        }
     }
 }

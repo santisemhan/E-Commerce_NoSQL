@@ -39,7 +39,7 @@ public class ProductController : ControllerBase
         return Created("Created", true);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut]
     public async Task<IActionResult> UpdateProduct([FromBody] Product product)
     {
         if (product == null) { return BadRequest(); }

@@ -1,12 +1,12 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace Commerce.Core.Models
+﻿namespace Commerce.Core.Models
 {
+    using MongoDB.Bson;
+    using MongoDB.Bson.Serialization.Attributes;
+
     public class Product
     {
         [BsonId]
-        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
+        [BsonRepresentation(BsonType.String)]
         public Guid ProductId { get; set; } = Guid.NewGuid();
 
         public string ProductName { get; set; }

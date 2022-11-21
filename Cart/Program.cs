@@ -35,7 +35,7 @@ services.Configure<RequestLocalizationOptions>(opts => {
 
 services.AddHttpClient("commerce", options =>
 {
-    options.BaseAddress = new Uri("https://localhost:5003/api/");
+    options.BaseAddress = new Uri("https://localhost:5002/api/");
 });
 
 // Databases Connections

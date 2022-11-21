@@ -81,8 +81,6 @@ public class CatalogRepository : ICatalogRepository
             .Execute(query.Bind(productCatalogId,catalog.ProductId,catalog.Price));
     }
 
-
-
     public async Task Update(ProductCatalog catalog)
     {
         var filter = Builders<ProductCatalog>

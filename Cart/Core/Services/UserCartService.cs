@@ -53,7 +53,7 @@
                  UserId = checkoutInfo.User.UserId,
                  Products = checkoutInfo.Products.Select(p => new
                  {
-                     ProductId = p.ProductCatalogId,
+                     ProductCatalogId = p.ProductCatalogId,
                      Quantity = p.Quantity
                  }),
                  IVA = true
@@ -61,6 +61,8 @@
 
             var request = await client.PostAsync("order", content);
             request.EnsureSuccessStatusCode();
+
+            await _userCartRepository.EmptyCart(userId);
         }
     }
 }

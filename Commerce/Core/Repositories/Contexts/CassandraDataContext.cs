@@ -10,7 +10,6 @@
 
         public CassandraDataContext(IConfiguration configuration)
         {
-            /*Borrar
             _session = Cluster.Builder()
                          .WithCloudSecureConnectionBundle(@"C:\Users\gonza\Documents\Programacion\secure-connect-e-commerce-bd2.zip")
                          .WithCredentials(configuration.GetValue<string>("Databases:Cassandra:ClientID"), configuration.GetValue<string>("Databases:Cassandra:ClientSecret"))
@@ -18,7 +17,7 @@
                          .Connect();
 
             _session.ChangeKeyspace(configuration.GetValue<string>("Databases:Cassandra:KeySpace"));
-            */
+
         }
 
         public ISession GetConnection()

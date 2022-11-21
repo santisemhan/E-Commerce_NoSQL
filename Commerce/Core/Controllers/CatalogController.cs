@@ -45,8 +45,8 @@ public class CatalogController : ControllerBase
         return Created("Created", true);
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateCatalog([FromBody] ProductCatalog catalog, [FromRoute] Guid id)
+    [HttpPut]
+    public async Task<IActionResult> UpdateCatalog([FromBody] ProductCatalog catalog)
     {
         if (catalog == null) { return BadRequest(); }
 
