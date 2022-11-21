@@ -18,47 +18,47 @@ public class CatalogController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAllCatalogs()
+    public async Task<IActionResult> GetCatalog()
     {
-        return Ok(await catalogService.GetAllCatalogs());
+        return Ok(await catalogService.GetAllProductsCatalog());
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetCatalogById([FromRoute] Guid id)
+    public async Task<IActionResult> GetProductCatalogById([FromRoute] Guid id)
     {
-        return Ok(await catalogService.GetCatalogById(id));
+        return Ok(await catalogService.GetProductCatalogById(id));
     }
 
     [HttpGet("log/{id}")]
-    public async Task<IActionResult> GetCatalogLogById([FromRoute] Guid id)
+    public async Task<IActionResult> GetProductCatalogLogById([FromRoute] Guid id)
     {
-        return Ok(await catalogService.GetCatalogLogById(id));
+        return Ok(await catalogService.GetProductCatalogLogById(id));
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateCatalog([FromBody] ProductCatalogDTO catalog)
+    public async Task<IActionResult> InsertProductCatalog([FromBody] ProductCatalogDTO catalog)
     {
         if (catalog == null) { return BadRequest(); }
 
-        await catalogService.InsertCatalog(catalog);
+        await catalogService.InsertProductCatalog(catalog);
 
         return Created("Created", true);
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateCatalog([FromBody] ProductCatalog catalog)
+    public async Task<IActionResult> UpdateProductCatalog([FromBody] ProductCatalog catalog)
     {
         if (catalog == null) { return BadRequest(); }
 
-        await catalogService.UpdateCatalog(catalog);
+        await catalogService.UpdateProductCatalog(catalog);
 
         return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCatalog([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteProductCatalog([FromRoute] Guid id)
     {
-        await catalogService.DeleteCatalog(id);
+        await catalogService.DeleteProductCatalog(id);
         return NoContent();
     }
 }

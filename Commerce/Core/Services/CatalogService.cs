@@ -17,33 +17,33 @@ public class CatalogService : ICatalogService
         this.catalogRepository = catalogRepository;
     }
 
-    public async Task DeleteCatalog(Guid id)
+    public async Task DeleteProductCatalog(Guid id)
     {
-        await GetCatalogById(id);
+        await GetProductCatalogById(id);
         await catalogRepository.Delete(id);
     }
 
-    public async Task<List<ProductCatalog>> GetAllCatalogs()
+    public async Task<List<ProductCatalog>> GetAllProductsCatalog()
     {
         return await catalogRepository.GetAll();
     }
 
-    public async Task<ProductCatalog> GetCatalogById(Guid id)
+    public async Task<ProductCatalog> GetProductCatalogById(Guid id)
     {
-        var catalog =  await catalogRepository.GetById(id);
-        if (catalog is null)
+        var product =  await catalogRepository.GetProductById(id);
+        if (product is null)
         {
             throw new AppException("El catalogo no existe", HttpStatusCode.NotFound);
         }
-        return catalog;
+        return product;
     }
 
-    public async Task<List<ProductCatalog>> GetCatalogLogById(Guid id)
+    public async Task<List<ProductCatalog>> GetProductCatalogLogById(Guid id)
     {
-        return  await catalogRepository.GetLogById(id);
+        return  await catalogRepository.GetLogByProductId(id);
     }
 
-    public async Task InsertCatalog(ProductCatalogDTO catalogDTO)
+    public async Task InsertProductCatalog(ProductCatalogDTO catalogDTO)
     {
         ProductCatalog catalog = new()
         {
@@ -53,17 +53,17 @@ public class CatalogService : ICatalogService
             Price = catalogDTO.Price
         };
         await catalogRepository.Insert(catalog);
-        await catalogRepository.InsertLog(catalog);
+        await catalogRepository.InsertProductLog(catalog);
     }
 
-    public async Task UpdateCatalog(ProductCatalog catalog)
+    public async Task UpdateProductCatalog(ProductCatalog catalog)
     {
-        var catalogo = await catalogRepository.GetById(catalog.Id);
+        var catalogo = await catalogRepository.GetProductById(catalog.Id);
         if (catalogo is null)
         {
             throw new AppException("El catalogo no existe", HttpStatusCode.NotFound);
         }
         await catalogRepository.Update(catalog);
-        await catalogRepository.InsertLog(catalog);
+        await catalogRepository.InsertProductLog(catalog);
     }
 }

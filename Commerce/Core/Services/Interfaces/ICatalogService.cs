@@ -5,15 +5,15 @@ namespace Commerce.Core.Services.Interfaces;
 
 public interface ICatalogService
 {
-    Task<List<ProductCatalog>> GetAllCatalogs();
+    Task<List<ProductCatalog>> GetAllProductsCatalog();
 
-    Task<ProductCatalog> GetCatalogById(Guid id);
+    Task<ProductCatalog> GetProductCatalogById(Guid id);
 
-    Task<List<ProductCatalog>> GetCatalogLogById(Guid id);
+    Task<List<ProductCatalog>> GetProductCatalogLogById(Guid id);
 
-    Task InsertCatalog(ProductCatalogDTO catalog);
+    Task InsertProductCatalog(ProductCatalogDTO catalog);
 
-    Task UpdateCatalog(ProductCatalog catalog);
+    Task UpdateProductCatalog(ProductCatalog catalog);
 
-    Task DeleteCatalog(Guid id);
+    Task DeleteProductCatalog(Guid id);
 }

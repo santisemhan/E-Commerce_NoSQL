@@ -60,7 +60,7 @@ public class OrderService : IOrderService
 
         foreach (var product in order.Products)
         {
-            var productoCatalog = await catalogService.GetCatalogById(product.ProductCatalogId);
+            var productoCatalog = await catalogService.GetProductCatalogById(product.ProductCatalogId);
             var producto = await productrRepository.GetById(productoCatalog.ProductId);
             if (producto.Stock < product.Quantity)
             {
@@ -70,7 +70,7 @@ public class OrderService : IOrderService
 
         foreach (var product in order.Products)
         {
-            var productoCatalog = await catalogService.GetCatalogById(product.ProductCatalogId);
+            var productoCatalog = await catalogService.GetProductCatalogById(product.ProductCatalogId);
             var producto = await productrRepository.GetById(productoCatalog.ProductId);
             producto.Stock -= product.Quantity;
             await productrRepository.Update(producto);

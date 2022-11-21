@@ -3,7 +3,6 @@ using Commerce.Core.Repositories.Contexts.Interfaces;
 using Commerce.Core.Repositories.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using Cassandra;
 
 namespace Commerce.Core.Repositories;
 
@@ -37,7 +36,7 @@ public class CatalogRepository : ICatalogRepository
             .ToList();
     }
 
-    public async Task<ProductCatalog> GetById(Guid id)
+    public async Task<ProductCatalog> GetProductById(Guid id)
     {
         var filter = Builders<ProductCatalog>.Filter.Eq(x => x.Id, id);
 
@@ -46,7 +45,7 @@ public class CatalogRepository : ICatalogRepository
             .Find(filter).SingleAsync();
     }
 
-    public async Task<List<ProductCatalog>> GetLogById(Guid id)
+    public async Task<List<ProductCatalog>> GetLogByProductId(Guid id)
     {
         var log = new List<ProductCatalog>();
 
@@ -62,31 +61,31 @@ public class CatalogRepository : ICatalogRepository
         return log;
     }
 
-    public async Task Insert(ProductCatalog catalog)
+    public async Task Insert(ProductCatalog product)
     {
         await _mongoConnection.GetConnection()
             .GetCollection<ProductCatalog>("ProductCatalogs")
-            .InsertOneAsync(catalog);
+            .InsertOneAsync(product);
     }
 
-    public async Task InsertLog(ProductCatalog catalog)
+    public async Task InsertProductLog(ProductCatalog product)
     {
         var query = await _cassandraConnection.GetConnection()
                     .PrepareAsync(@"INSERT INTO catalog (id, moment, authorId,productid, price) 
                                     VALUES (?,?,?,?,? )");
 
         _cassandraConnection.GetConnection()
-            .Execute(query.Bind(Guid.NewGuid(),DateTime.Now, catalog.AuthorId,catalog.ProductId,catalog.Price));
+            .Execute(query.Bind(Guid.NewGuid(),DateTime.Now, product.AuthorId, product.ProductId, product.Price));
     }
 
-    public async Task Update(ProductCatalog catalog)
+    public async Task Update(ProductCatalog product)
     {
         var filter = Builders<ProductCatalog>
             .Filter
-            .Eq(x => x.Id, catalog.Id);
+            .Eq(x => x.Id, product.Id);
 
         await _mongoConnection.GetConnection()
             .GetCollection<ProductCatalog>("ProductCatalogs")
-            .ReplaceOneAsync(filter,catalog);
+            .ReplaceOneAsync(filter, product);
     }
 }

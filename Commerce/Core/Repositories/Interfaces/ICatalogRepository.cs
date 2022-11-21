@@ -6,13 +6,13 @@ public interface ICatalogRepository
 {
     Task<List<ProductCatalog>> GetAll();
 
-    Task<ProductCatalog> GetById(Guid id);
+    Task<ProductCatalog> GetProductById(Guid id);
 
-    Task<List<ProductCatalog>> GetLogById(Guid id);
+    Task<List<ProductCatalog>> GetLogByProductId(Guid id);
 
     Task Insert(ProductCatalog catalog);
 
-    Task InsertLog(ProductCatalog catalog);
+    Task InsertProductLog(ProductCatalog catalog);
 
     Task Update(ProductCatalog catalog);
 
