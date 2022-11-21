@@ -82,6 +82,24 @@
             return result;
         }
 
+        public async Task<List<UserActivityDTO>> GetUserActivityAsync(Guid userId)
+        {
+            var result = new List<UserActivityDTO>();
+
+            var query = await _cassandraConnection.GetConnection()
+                .PrepareAsync("SELECT * FROM cart WHERE userId = ?");
+
+            var queryResult = _cassandraConnection.GetConnection()
+                   .Execute(query.Bind(userId));
+
+            foreach(var row in queryResult)
+            {
+                result.Add(new UserActivityDTO(row));
+            }
+
+            return result;
+        }
+
         public async Task RestoreCart(Guid userId, Guid logId)
         {
             var processId = Guid.NewGuid();

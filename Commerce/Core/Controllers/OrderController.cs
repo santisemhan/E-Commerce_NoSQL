@@ -36,13 +36,23 @@ public class OrderController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateOrder([FromBody] OrderDTO order)
+    public async Task<IActionResult> CreateOrder([FromBody] OrderRequestDTO order)
     {
         if (order == null) { return BadRequest(); }
 
         await orderService.InsertOrder(order);
 
         return Created("Created", true);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateOrder([FromBody] OrderDTO order, Guid id)
+    {
+        if (order == null) { return BadRequest(); }
+
+        await orderService.UpdateOrder(order, id);
+
+        return NoContent();
     }
 
     [HttpDelete("{id}")]

@@ -36,7 +36,7 @@ public class CatalogController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateCatalog([FromBody] ProductCatalogDTO catalog)
+    public async Task<IActionResult> CreateCatalog([FromBody] ProductCatalogRequestDTO catalog)
     {
         if (catalog == null) { return BadRequest(); }
 

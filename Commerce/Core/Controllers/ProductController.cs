@@ -30,7 +30,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateProduct([FromBody] ProductDTO product)
+    public async Task<IActionResult> CreateProduct([FromBody] ProductRequestDTO product)
     {
         if (product == null) { return BadRequest(); }
 

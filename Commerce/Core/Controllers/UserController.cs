@@ -30,7 +30,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateUser([FromBody] UserDTO user)
+    public async Task<IActionResult> CreateUser([FromBody] UserRequestDTO user)
     {
         if (user == null) { return BadRequest(); }
 
