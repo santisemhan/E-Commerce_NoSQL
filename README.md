@@ -2,13 +2,7 @@
 
 ## Objetivo
 
-Se pide construir una aplicación para gestionar la creación de pedidos registrando: 
-Los datos de los usuarios que realizaran los pedidos.
-El carrito de compras de estos.
-La conversión de esos carritos de compras en pedidos.
-La finalización de esos pedidos y su conversión a facturas. 
-Los pagos de las facturas.
-La imputación de los pagos a la factura de los usuarios. 
+Se pide construir una aplicación para gestionar la creación de pedidos.
 
 ### Requerimientos
 
